@@ -1895,3 +1895,18 @@ select.sp-input option {
     text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.7);
     line-height: 1;
 }
+
+/* ================= 14. تلوين اللوحة من السيرفر ================= */
+.board-hex.team1-captured::before {
+    background-color: var(--team1-color) !important;
+}
+
+.board-hex.team2-captured::before {
+    background-color: var(--team2-color) !important;
+}
+
+.board-hex.team1-captured span,
+.board-hex.team2-captured span {
+    color: white !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
