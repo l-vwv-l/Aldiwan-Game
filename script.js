@@ -1,5 +1,30 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // 🧹 تصفير الجرس في السيرفر أول ما تفتح شاشة التلفزيون عشان ما يعلق على ضغطة قديمة
+    if (typeof db !== 'undefined') {
+        db.ref('game/buzzer').set({ status: 'waiting', team: null });
+    }
+
+    // 🔗 توليد الباركودات برابط موقعك الحقيقي
+    const gameUrl = "https://cheerful-crepe-bcc27f.netlify.app";
+
+    setTimeout(() => {
+        if (document.getElementById("qr-presenter")) {
+            new QRCode(document.getElementById("qr-presenter"), {
+                text: gameUrl + "/presenter.html",
+                width: 180, height: 180,
+                colorDark: "#3a1c4a", colorLight: "#ffffff",
+            });
+        }
+        if (document.getElementById("qr-player")) {
+            new QRCode(document.getElementById("qr-player"), {
+                text: gameUrl + "/player.html",
+                width: 180, height: 180,
+                colorDark: "#3a1c4a", colorLight: "#ffffff",
+            });
+        }
+    }, 1000);
+
     const w1 = document.getElementById("w1");
     const w2 = document.getElementById("w2");
     const w3 = document.getElementById("w3");
@@ -42,12 +67,22 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     btnTvStart.addEventListener("click", () => {
-        lobbyControls.style.opacity = "0";
-        setTimeout(() => lobbyControls.style.display = "none", 500);
+        if (lobbyControls) {
+            lobbyControls.style.opacity = "0";
+            setTimeout(() => lobbyControls.style.display = "none", 500);
+        }
+        if (waitingMessage) {
+            waitingMessage.style.opacity = "0";
+            setTimeout(() => waitingMessage.classList.remove("show-message"), 500);
+        }
+
         logoWrapper.classList.remove("move-up");
+        logoWrapper.classList.remove("floating-logo");
 
         // 📡 تصفير الجرس في السيرفر عند بدء اللعبة
-        db.ref('game/buzzer').set({ status: 'waiting', team: null });
+        if (typeof db !== 'undefined') {
+            db.ref('game/buzzer').set({ status: 'waiting', team: null });
+        }
 
         setTimeout(() => { w3.classList.remove("pop-in"); }, 100);
         setTimeout(() => { w2.classList.remove("pop-in"); }, 300);
@@ -321,19 +356,21 @@ document.addEventListener("DOMContentLoaded", () => {
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
 
     // استماع للتنبيهات من الجوالات
-    db.ref('game/buzzer').on('value', (snapshot) => {
-        const data = snapshot.val();
-        if (data && data.status === 'pressed') {
-            const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
-            let tName = data.team === 1 ? (settings.team1Name || "الفريق الأول") : (settings.team2Name || "الفريق الثاني");
-            let tColor = data.team === 1 ? (settings.team1Color || "#FF9100") : (settings.team2Color || "#10b981");
+    if (typeof db !== 'undefined') {
+        db.ref('game/buzzer').on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data && data.status === 'pressed') {
+                const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
+                let tName = data.team === 1 ? (settings.team1Name || "الفريق الأول") : (settings.team2Name || "الفريق الثاني");
+                let tColor = data.team === 1 ? (settings.team1Color || "#FF9100") : (settings.team2Color || "#10b981");
 
-            tvBuzzerTeamName.innerText = tName;
-            tvBuzzerBox.style.setProperty('--alert-color', tColor);
+                tvBuzzerTeamName.innerText = tName;
+                tvBuzzerBox.style.setProperty('--alert-color', tColor);
 
-            alertOverlay.classList.add('show-alert');
-        } else {
-            alertOverlay.classList.remove('show-alert');
-        }
-    });
+                alertOverlay.classList.add('show-alert');
+            } else {
+                alertOverlay.classList.remove('show-alert');
+            }
+        });
+    }
 });
