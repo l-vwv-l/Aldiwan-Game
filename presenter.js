@@ -51,19 +51,31 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updatePresenterSettings();
 
-    // 🎨 تلوين لوحة المقدم بالتزامن مع التلفزيون
+    // 🎨 تلوين لوحة المقدم بالتزامن مع التلفزيون (وإخفاء الزر العشوائي بعد البداية)
     if (typeof db !== 'undefined') {
         db.ref('game/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
+            let isGameStarted = false; // 💡 فحص هل بدأت اللعبة وتم تلوين أي خلية؟
+
             allHexes.forEach(hex => {
                 const letter = hex.innerText.trim();
                 hex.classList.remove('team1-captured', 'team2-captured');
+
                 if (boardData[letter] === 'team1') {
                     hex.classList.add('team1-captured');
+                    isGameStarted = true; // اللعبة بدأت
                 } else if (boardData[letter] === 'team2') {
                     hex.classList.add('team2-captured');
+                    isGameStarted = true; // اللعبة بدأت
                 }
             });
+
+            // 💡 السحر: إخفاء زر العشوائي إذا بدأت اللعبة، وإظهاره إذا اللوحة فاضية
+            if (isGameStarted) {
+                randomBtn.style.display = 'none';
+            } else {
+                randomBtn.style.display = 'flex';
+            }
         });
     }
 
