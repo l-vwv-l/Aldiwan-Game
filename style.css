@@ -1910,3 +1910,10 @@ select.sp-input option {
     color: white !important;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
 }
+
+/* ================= 15. إصلاح النزول في جوال المقدم ================= */
+body.pr-body {
+    overflow-y: auto !important;
+    height: auto !important;
+    min-height: 100vh;
+}

@@ -1,5 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // 📡 فحص اتصال التلفزيون الحقيقي
+    const statusBadge = document.querySelector('.pr-floating-status');
+    if (statusBadge && typeof db !== 'undefined') {
+        db.ref('game/tv_status').on('value', (snapshot) => {
+            if (snapshot.val() === 'online') {
+                statusBadge.innerHTML = 'متصل بالشاشة 🟢';
+                statusBadge.style.color = '#00E676';
+            } else {
+                statusBadge.innerHTML = 'الشاشة مغلقة 🔴';
+                statusBadge.style.color = '#ff5252';
+            }
+        });
+    }
+
     const allHexes = document.querySelectorAll('.pr-mini-board .board-hex');
     const activeLetterBadge = document.getElementById('pr-active-letter');
     const questionText = document.getElementById('pr-question-text');

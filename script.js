@@ -1,8 +1,14 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🧹 تصفير الجرس في السيرفر أول ما تفتح شاشة التلفزيون عشان ما يعلق على ضغطة قديمة
+    // 🧹 تصفير الجرس وإخبار السيرفر إن التلفزيون شغال
     if (typeof db !== 'undefined') {
+        // تصفير الجرس
         db.ref('game/buzzer').set({ status: 'waiting', team: null });
+
+        // 📡 إرسال حالة التلفزيون للسيرفر (شغال أو مغلق)
+        const tvStatusRef = db.ref('game/tv_status');
+        tvStatusRef.set('online'); // التلفزيون اشتغل
+        tvStatusRef.onDisconnect().set('offline'); // لو تقفل التلفزيون فجأة، السيرفر يكتب مغلق
     }
 
     // 🔗 توليد الباركودات برابط موقعك الحقيقي
