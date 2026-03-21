@@ -370,24 +370,38 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 🎨 نظام تلوين اللوحة الذكي من السيرفر
+    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط 💯
     // ==========================================
     if (typeof db !== 'undefined') {
         db.ref('game/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
             const allTvHexes = document.querySelectorAll('#board-container .board-hex');
 
+            let team1Score = 0;
+            let team2Score = 0;
+
             allTvHexes.forEach(hex => {
                 const letter = hex.querySelector('span').innerText.trim();
 
+                // تنظيف الألوان القديمة
                 hex.classList.remove('team1-captured', 'team2-captured');
 
+                // تلوين حسب السيرفر وحساب النقاط
                 if (boardData[letter] === 'team1') {
                     hex.classList.add('team1-captured');
+                    team1Score++;
                 } else if (boardData[letter] === 'team2') {
                     hex.classList.add('team2-captured');
+                    team2Score++;
                 }
             });
+
+            // 💯 تحديث الأرقام في شريط التلفزيون العلوي
+            const scoreElements = document.querySelectorAll('.score-hex span');
+            if (scoreElements.length >= 2) {
+                scoreElements[0].innerText = team1Score; // الفريق الأول (يمين)
+                scoreElements[1].innerText = team2Score; // الفريق الثاني (يسار)
+            }
         });
 
         // 🎯 مراقبة الحرف المختار من المقدم وإبرازه في التلفزيون
@@ -405,4 +419,4 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
-});
+}); // 👈 هذي قفلة الملف الأساسية
