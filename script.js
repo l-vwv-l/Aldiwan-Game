@@ -373,4 +373,28 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // ==========================================
+    // 🎨 نظام تلوين اللوحة الذكي من السيرفر
+    // ==========================================
+    if (typeof db !== 'undefined') {
+        db.ref('game/board').on('value', (snapshot) => {
+            const boardData = snapshot.val() || {};
+            const allTvHexes = document.querySelectorAll('#board-container .board-hex');
+
+            allTvHexes.forEach(hex => {
+                const letter = hex.querySelector('span').innerText.trim();
+
+                // تنظيف الألوان القديمة
+                hex.classList.remove('team1-captured', 'team2-captured');
+
+                // تلوين حسب السيرفر
+                if (boardData[letter] === 'team1') {
+                    hex.classList.add('team1-captured');
+                } else if (boardData[letter] === 'team2') {
+                    hex.classList.add('team2-captured');
+                }
+            });
+        });
+    }
 });

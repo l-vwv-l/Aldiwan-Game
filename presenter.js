@@ -57,10 +57,12 @@ document.addEventListener("DOMContentLoaded", () => {
             this.style.transform = 'scale(1.2)'; this.style.filter = 'brightness(1.3)'; this.style.zIndex = '10';
 
             // 📡 السحر: فتح الجرس للفرق لما المقدم يختار حرف!
-            db.ref('game/buzzer').set({
-                status: 'waiting',
-                team: null
-            });
+            if (typeof db !== 'undefined') {
+                db.ref('game/buzzer').set({
+                    status: 'waiting',
+                    team: null
+                });
+            }
         });
     });
 
@@ -74,8 +76,38 @@ document.addEventListener("DOMContentLoaded", () => {
         randomHex.click();
     });
 
-    btnTeam1.addEventListener('click', () => { alert('مستقبلاً سيتم تلوين اللوحة في التلفزيون!'); });
-    btnTeam2.addEventListener('click', () => { alert('مستقبلاً سيتم تلوين اللوحة في التلفزيون!'); });
-    document.querySelector('.pr-btn-wrong').addEventListener('click', () => { alert('مستقبلاً يتم فتح السؤال للجميع'); });
+    // 📡 السحر: إرسال أمر تلوين اللوحة للسيرفر عند الإجابة
+    btnTeam1.addEventListener('click', () => {
+        const letter = activeLetterBadge.innerText.trim();
+        if (!letter || letter === '-') return;
+
+        // تلوين الخلية للفريق الأول في السيرفر
+        if (typeof db !== 'undefined') {
+            db.ref('game/board/' + letter).set('team1');
+            db.ref('game/buzzer').set({ status: 'waiting', team: null });
+        }
+    });
+
+    btnTeam2.addEventListener('click', () => {
+        const letter = activeLetterBadge.innerText.trim();
+        if (!letter || letter === '-') return;
+
+        // تلوين الخلية للفريق الثاني في السيرفر
+        if (typeof db !== 'undefined') {
+            db.ref('game/board/' + letter).set('team2');
+            db.ref('game/buzzer').set({ status: 'waiting', team: null });
+        }
+    });
+
+    document.querySelector('.pr-btn-wrong').addEventListener('click', () => {
+        const letter = activeLetterBadge.innerText.trim();
+        if (!letter || letter === '-') return;
+
+        // مسح لون الخلية (إذا كانت إجابة خاطئة أو تبي تصفر الحرف)
+        if (typeof db !== 'undefined') {
+            db.ref('game/board/' + letter).set('neutral');
+            db.ref('game/buzzer').set({ status: 'waiting', team: null });
+        }
+    });
 
 });
