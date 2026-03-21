@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>حروف مع الديوان</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="glass-layer">
+        <div class="glass-hex left-side hex-l1"><span>ي</span></div>
+        <div class="glass-hex left-side hex-l2"><span>ق</span></div>
+        <div class="glass-hex left-side hex-l3"><span>ي</span></div>
+        <div class="glass-hex left-side hex-l4"><span>ج</span></div>
+        <div class="glass-hex left-side hex-l5"><span>ل</span></div>
+        <div class="glass-hex left-side hex-l6"><span>ؤ</span></div>
+        <div class="glass-hex left-side hex-l7"><span>ش</span></div>
+        <div class="glass-hex left-side hex-l8"><span>غ</span></div>
+        <div class="glass-hex left-side hex-l9"><span>م</span></div>
+        <div class="glass-hex left-side hex-l10"><span>ح</span></div>
+        <div class="glass-hex left-side hex-l11"><span>س</span></div>
+        <div class="glass-hex left-side hex-l12"><span>ن</span></div>
+        <div class="glass-hex left-side hex-l13"><span>ك</span></div>
+        <div class="glass-hex left-side hex-l14"><span>و</span></div>
+
+        <div class="glass-hex right-side hex-r1"><span>ي</span></div>
+        <div class="glass-hex right-side hex-r2"><span>ج</span></div>
+        <div class="glass-hex right-side hex-r3"><span>ؤ</span></div>
+        <div class="glass-hex right-side hex-r4"><span>ن</span></div>
+        <div class="glass-hex right-side hex-r5"><span>ج</span></div>
+        <div class="glass-hex right-side hex-r6"><span>ى</span></div>
+        <div class="glass-hex right-side hex-r7"><span>ن</span></div>
+        <div class="glass-hex right-side hex-r8"><span>ج</span></div>
+        <div class="glass-hex right-side hex-r9"><span>ى</span></div>
+        <div class="glass-hex right-side hex-r10"><span>ف</span></div>
+        <div class="glass-hex right-side hex-r11"><span>د</span></div>
+        <div class="glass-hex right-side hex-r12"><span>ر</span></div>
+        <div class="glass-hex right-side hex-r13"><span>ط</span></div>
+        <div class="glass-hex right-side hex-r14"><span>ز</span></div>
+    </div>
+
+    <div id="welcome-screen">
+        <div id="logo-wrapper" class="center-position">
+            <div id="logo-container" class="logo-base">
+                <div class="word word-hurouf" id="w1">حروف</div>
+                <div class="word word-maa" id="w2">مـــــع</div>
+                <div class="word word-diwan" id="w3">الديوان</div>
+            </div>
+        </div>
+
+        <div id="waiting-message" class="hidden-message">
+            يتم إعداد اللعبة... ⏳
+        </div>
+
+        <div id="lobby-controls" class="hidden-controls">
+
+            <div id="mobile-controls" style="display: none;">
+                <button class="uiverse-btn btn-green" id="btn-mobile-cast">
+                    <span class="btn-content">عرض في الشاشة 📺</span>
+                </button>
+                <button class="uiverse-btn btn-orange">
+                    <span class="btn-content">الإعدادات ⚙️</span>
+                </button>
+            </div>
+
+            <div id="tv-controls" style="display: none;">
+                <button class="uiverse-btn btn-green" id="btn-tv-start">
+                    <span class="btn-content">ابدأ 🚀</span>
+                </button>
+                <button class="uiverse-btn btn-orange" id="btn-tv-settings">
+                    <span class="btn-content">الإعدادات ⚙️</span>
+                </button>
+                <button class="uiverse-btn btn-orange" id="btn-tv-remote">
+                    <span class="btn-content">إعداد عن بعد 📱</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="settings-page" class="hidden-screen" style="opacity: 0;">
+        <div class="settings-page-content">
+            <div class="settings-logo">
+                <div class="logo-base" style="transform: scale(0.4); transform-origin: top center;">
+                    <div class="word word-hurouf" id="sw1">حروف</div>
+                    <div class="word word-maa" id="sw2">مـــــع</div>
+                    <div class="word word-diwan" id="sw3">الديوان</div>
+                </div>
+            </div>
+
+            <div class="settings-form" id="settings-form-container" style="opacity: 0;">
+
+                <div class="setting-row">
+                    <label class="setting-label">اسم المسابقة (حروف مع):</label>
+                    <div class="setting-control">
+                        <input type="text" id="setting-comp-name" class="sp-input" placeholder="الديوان">
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">اسم الفريق الأول:</label>
+                    <div class="setting-control">
+                        <input type="text" id="setting-team1" class="sp-input" placeholder="الفريق الأول">
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">لون الفريق الأول:</label>
+                    <div class="setting-control">
+                        <div class="container-items team1-colors">
+                            <button class="item-color selected-color" style="--color: #FF9100"
+                                aria-color="برتقالي"></button>
+                            <button class="item-color" style="--color: #e11d48" aria-color="أحمر"></button>
+                            <button class="item-color" style="--color: #ec4899" aria-color="وردي"></button>
+                            <button class="item-color" style="--color: #facc15" aria-color="أصفر"></button>
+                            <button class="item-color" style="--color: #84cc16" aria-color="ليموني"></button>
+                            <button class="item-color" style="--color: #10b981" aria-color="أخضر"></button>
+                            <button class="item-color" style="--color: #06b6d4" aria-color="سماوي"></button>
+                            <button class="item-color" style="--color: #3b82f6" aria-color="أزرق"></button>
+                            <button class="item-color" style="--color: #6366f1" aria-color="نيلي"></button>
+                            <button class="item-color" style="--color: #8b5cf6" aria-color="بنفسجي"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">اسم الفريق الثاني:</label>
+                    <div class="setting-control">
+                        <input type="text" id="setting-team2" class="sp-input" placeholder="الفريق الثاني">
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">لون الفريق الثاني:</label>
+                    <div class="setting-control">
+                        <div class="container-items team2-colors">
+                            <button class="item-color" style="--color: #FF9100" aria-color="برتقالي"></button>
+                            <button class="item-color" style="--color: #e11d48" aria-color="أحمر"></button>
+                            <button class="item-color" style="--color: #ec4899" aria-color="وردي"></button>
+                            <button class="item-color" style="--color: #facc15" aria-color="أصفر"></button>
+                            <button class="item-color" style="--color: #84cc16" aria-color="ليموني"></button>
+                            <button class="item-color selected-color" style="--color: #10b981"
+                                aria-color="أخضر"></button>
+                            <button class="item-color" style="--color: #06b6d4" aria-color="سماوي"></button>
+                            <button class="item-color" style="--color: #3b82f6" aria-color="أزرق"></button>
+                            <button class="item-color" style="--color: #6366f1" aria-color="نيلي"></button>
+                            <button class="item-color" style="--color: #8b5cf6" aria-color="بنفسجي"></button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">مصدر الأسئلة:</label>
+                    <div class="setting-control" style="flex-direction: column; align-items: center; gap: 15px;">
+                        <div class="sp-segmented" id="q-source-toggle">
+                            <button class="sp-seg-btn active" data-source="ai">الذكاء الاصطناعي</button>
+                            <button class="sp-seg-btn" data-source="custom">أسئلة مخصصة</button>
+                        </div>
+
+                        <div id="btn-open-portal-wrapper"
+                            style="display: none; justify-content: center; width: 100%; margin-top: 5px;">
+                            <button id="btn-open-portal" class="uiverse-btn btn-orange" style="width: 220px;">
+                                <span class="btn-content" style="font-size: 1.6rem; padding: 8px 16px;">بوابة الأسئلة
+                                    📝</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row" id="ai-category-row">
+                    <label class="setting-label">مجال الأسئلة:</label>
+                    <div class="setting-control">
+                        <select id="setting-category" class="sp-input" style="appearance: none; cursor: pointer;">
+                            <option value="all">عشوائي (كل المجالات)</option>
+                            <option value="history">تاريخ</option>
+                            <option value="sports">رياضة</option>
+                            <option value="science">علوم</option>
+                            <option value="language">لغة ومعاني</option>
+                            <option value="geo">جغرافيا</option>
+                            <option value="proverbs">أمثال وحكم</option>
+                            <option value="social">مصطلحات اجتماعية</option>
+                            <option value="nature">نباتات وحيوانات</option>
+                            <option value="culture">ثقافة عامة</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">عدد جولات الفوز:</label>
+                    <div class="setting-control">
+                        <div class="sp-segmented">
+                            <button class="sp-seg-btn active">جولة</button>
+                            <button class="sp-seg-btn">جولتين</button>
+                            <button class="sp-seg-btn">ثلاث جولات</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">نوع المقدم:</label>
+                    <div class="setting-control">
+                        <div class="sp-segmented">
+                            <button class="sp-seg-btn active">مقدم بشري</button>
+                            <button class="sp-seg-btn">مقدم آلي</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="setting-row">
+                    <label class="setting-label">الصوت:</label>
+                    <div class="setting-control">
+                        <div class="sp-segmented">
+                            <button class="sp-seg-btn">إيقاف</button>
+                            <button class="sp-seg-btn active">تشغيل</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div id="settings-save-container"
+                style="opacity: 0; margin-top: 35px; display: flex; justify-content: center; width: 100%;">
+                <button id="btn-save-settings" class="uiverse-btn btn-green">
+                    <span class="btn-content">حفظ ورجوع 💾</span>
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <div id="questions-portal-screen" class="hidden-screen" style="opacity: 0;">
+        <div class="portal-content">
+            <button id="btn-back-from-portal" class="portal-back-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <line x1="19" y1="12" x2="5" y2="12"></line>
+                    <polyline points="12 19 5 12 12 5"></polyline>
+                </svg>
+            </button>
+
+            <div class="settings-logo" style="margin-bottom: 0;">
+                <div class="logo-base" style="transform: scale(0.35); transform-origin: top center;">
+                    <div class="word word-hurouf pop-in" id="pw1">حروف</div>
+                    <div class="word word-maa pop-in" id="pw2">مـــــع</div>
+                    <div class="word word-diwan pop-in" id="pw3">الديوان</div>
+                </div>
+            </div>
+
+            <h1 class="portal-title" style="margin-top: -30px;">بوابة الأسئلة</h1>
+
+            <div class="portal-input-area">
+                <p id="portal-instruction">اختر حرفاً من الأسفل لعرض/إضافة الأسئلة 👆</p>
+
+                <div id="portal-form" style="display: none; width: 100%;">
+                    <h2 id="selected-letter-display" class="portal-letter-badge">أ</h2>
+                    <input type="text" id="custom-q-input" class="portal-input" placeholder="اكتب السؤال هنا...">
+                    <input type="text" id="custom-a-input" class="portal-input" placeholder="اكتب الإجابة هنا...">
+
+                    <div style="display: flex; gap: 10px; width: 100%;">
+                        <button id="btn-save-question" class="portal-save-btn">حفظ السؤال ✔️</button>
+                        <button id="btn-delete-question" class="portal-delete-btn" style="display: none;">حذف
+                            🗑️</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="portal-keyboard">
+                <button class="portal-key">أ</button><button class="portal-key">ب</button><button
+                    class="portal-key">ت</button>
+                <button class="portal-key">ث</button><button class="portal-key">ج</button><button
+                    class="portal-key">ح</button>
+                <button class="portal-key">خ</button><button class="portal-key">د</button><button
+                    class="portal-key">ذ</button>
+                <button class="portal-key">ر</button><button class="portal-key">ز</button><button
+                    class="portal-key">س</button>
+                <button class="portal-key">ش</button><button class="portal-key">ص</button><button
+                    class="portal-key">ض</button>
+                <button class="portal-key">ط</button><button class="portal-key">ظ</button><button
+                    class="portal-key">ع</button>
+                <button class="portal-key">غ</button><button class="portal-key">ف</button><button
+                    class="portal-key">ق</button>
+                <button class="portal-key">ك</button><button class="portal-key">ل</button><button
+                    class="portal-key">م</button>
+                <button class="portal-key">ن</button><button class="portal-key">هـ</button><button
+                    class="portal-key">و</button>
+                <button class="portal-key">ي</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="transition-screen" style="display: none;">
+        <div id="transition-logo">
+            <div class="logo-base">
+                <div class="word word-hurouf" id="tw1">حروف</div>
+                <div class="word word-maa" id="tw2">مـــــع</div>
+                <div class="word word-diwan" id="tw3">الديوان</div>
+            </div>
+        </div>
+        <div id="expanding-hex" class="hex-shape"></div>
+        <div id="round-title-wrapper">
+            <div id="round-title">
+                <span class="round-word-aljawla">الجولة</span>
+                <span class="round-word-aloula">الأولى</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="game-screen" class="hidden-screen">
+        <div id="game-bg-glass"></div>
+        <div class="button-box" id="fab-menu">
+            <div class="button exit-btn" id="btn-exit-game" title="خروج">
+                <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="#ffffff" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
+                    <polyline points="8 17 3 12 8 7" />
+                    <line x1="3" y1="12" x2="15" y2="12" />
+                </svg>
+            </div>
+            <div class="button extra-btn" title="زر إضافي">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M773.907692 992.768h-590.76923c-48.864492 0-88.615385-39.754831-88.615385-88.615385V120.032492c0-48.852677 39.743015-88.615385 88.599631-88.631138l379.076923-0.169354h0.047261c35.233477 0 78.217846 18.699815 102.230646 44.480985l158.0032 169.621661C845.686154 270.245415 862.523077 313.040738 862.523077 347.096615v300.780308c0 27.1872-22.043569 49.230769-49.230769 49.230769s-49.230769-22.043569-49.23077-49.230769V347.096615c0-9.168738-7.388554-27.951262-13.627076-34.650584l-158.011077-169.6256c-5.490215-5.891938-22.122338-13.126892-30.176493-13.126893h-0.003938L192.984615 129.858954V894.306462h571.076923V805.415385c0-27.1872 22.043569-49.230769 49.23077-49.23077s49.230769 22.043569 49.230769 49.23077v98.73723c0 48.864492-39.754831 88.615385-88.615385 88.615385z"
+                        fill="#ffffff"></path>
+                    <path
+                        d="M414.802708 753.829415a49.092923 49.092923 0 0 1-34.812062-14.418707l-90.289231-90.285293c-19.223631-19.223631-19.227569-50.396554 0-69.624123 19.223631-19.223631 50.396554-19.223631 69.624123 0l55.47717 55.473231 187.7504-187.746461c19.227569-19.223631 50.396554-19.219692 69.624123 0 19.227569 19.227569 19.227569 50.396554 0 69.624123l-222.562462 222.558523a49.073231 49.073231 0 0 1-34.812061 14.418707z"
+                        fill="#ffffff"></path>
+                </svg>
+            </div>
+            <div class="button main-btn" id="btn-toggle-menu" title="القائمة">
+                <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M793.6 678.4c29.866667-51.2 81.066667-76.8 132.266667-72.533333 8.533333-29.866667 12.8-64 12.8-98.133334 0-29.866667-4.266667-59.733333-8.533334-85.333333-51.2 8.533333-106.666667-21.333333-136.533333-72.533333-29.866667-51.2-25.6-115.2 8.533333-153.6-46.933333-42.666667-98.133333-72.533333-157.866666-93.866667-17.066667 51.2-68.266667 85.333333-132.266667 85.333333s-110.933333-34.133333-132.266667-85.333333c-59.733333 21.333333-110.933333 55.466667-157.866666 98.133333 34.133333 42.666667 38.4 102.4 8.533333 153.6-29.866667 51.2-85.333333 76.8-136.533333 68.266667-4.266667 29.866667-8.533333 59.733333-8.533334 89.6 0 34.133333 4.266667 64 12.8 93.866667 51.2-4.266667 102.4 21.333333 132.266667 72.533333 25.6 51.2 25.6 106.666667-4.266667 149.333333 46.933333 42.666667 98.133333 72.533333 157.866667 89.6 21.333333-46.933333 68.266667-76.8 128-76.8s106.666667 29.866667 128 76.8c59.733333-17.066667 110.933333-51.2 157.866667-89.6-29.866667-42.666667-34.133333-98.133333-4.266667-149.333333z m-281.6 17.066667c-102.4 0-183.466667-81.066667-183.466667-183.466667S409.6 328.533333 512 328.533333s183.466667 81.066667 183.466667 183.466667-81.066667 183.466667-183.466667 183.466667z"
+                        fill="#ffffff"></path>
+                </svg>
+            </div>
+        </div>
+
+        <div class="game-top-bar">
+            <div class="team-score-card team-card-right">
+                <div class="team-name-box">الفريق الأول</div>
+                <div class="score-hex"><span>0</span></div>
+            </div>
+            <div class="top-center-container">
+                <div id="round-title-mini">
+                    <span class="round-word-aljawla-mini">الجولة</span>
+                    <span class="round-word-aloula-mini">الأولى</span>
+                </div>
+                <div class="game-logo-mini">
+                    <div class="logo-base" style="transform: scale(0.60); transform-origin: top center;">
+                        <div class="word word-hurouf pop-in" id="gw1" style="opacity: 0;">حروف</div>
+                        <div class="word word-maa pop-in" id="gw2" style="opacity: 0;">مـــــع</div>
+                        <div class="word word-diwan pop-in" id="gw3" style="opacity: 0;">الديوان</div>
+                    </div>
+                </div>
+            </div>
+            <div class="team-score-card team-card-left">
+                <div class="score-hex"><span>0</span></div>
+                <div class="team-name-box">الفريق الثاني</div>
+            </div>
+        </div>
+
+        <div class="square-board-wrapper">
+            <div class="board-paths-bg">
+                <div class="path-team1-right"></div>
+                <div class="path-team1-left"></div>
+                <div class="path-team2-top"></div>
+                <div class="path-team2-bottom"></div>
+            </div>
+            <div id="board-container">
+                <div class="board-row">
+                    <button class="board-hex"><span>ص</span></button>
+                    <button class="board-hex"><span>ل</span></button>
+                    <button class="board-hex"><span>خ</span></button>
+                    <button class="board-hex"><span>و</span></button>
+                    <button class="board-hex"><span>م</span></button>
+                </div>
+                <div class="board-row indent-row">
+                    <button class="board-hex"><span>ت</span></button>
+                    <button class="board-hex"><span>غ</span></button>
+                    <button class="board-hex"><span>ز</span></button>
+                    <button class="board-hex"><span>د</span></button>
+                    <button class="board-hex"><span>ش</span></button>
+                </div>
+                <div class="board-row">
+                    <button class="board-hex"><span>أ</span></button>
+                    <button class="board-hex"><span>ع</span></button>
+                    <button class="board-hex"><span>ف</span></button>
+                    <button class="board-hex"><span>ط</span></button>
+                    <button class="board-hex"><span>ك</span></button>
+                </div>
+                <div class="board-row indent-row">
+                    <button class="board-hex"><span>س</span></button>
+                    <button class="board-hex"><span>ب</span></button>
+                    <button class="board-hex"><span>ح</span></button>
+                    <button class="board-hex"><span>ي</span></button>
+                    <button class="board-hex"><span>ض</span></button>
+                </div>
+                <div class="board-row">
+                    <button class="board-hex"><span>ج</span></button>
+                    <button class="board-hex"><span>ر</span></button>
+                    <button class="board-hex"><span>ذ</span></button>
+                    <button class="board-hex"><span>ق</span></button>
+                    <button class="board-hex"><span>هـ</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script src="db.js"></script>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

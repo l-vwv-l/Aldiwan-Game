@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>جرس المتسابق - الديوان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="pl-body">
+
+    <div id="game-bg-glass"></div>
+
+    <div id="pl-team-selection" class="pl-selection-overlay">
+        <div class="pl-selection-box">
+            <h2 class="pl-title">أنت تمثل أي فريق؟</h2>
+            <button class="uiverse-btn pl-btn-t1" id="btn-choose-t1">
+                <span class="btn-content" id="txt-choose-t1">الفريق الأول</span>
+            </button>
+            <button class="uiverse-btn pl-btn-t2" id="btn-choose-t2" style="margin-top: 15px;">
+                <span class="btn-content" id="txt-choose-t2">الفريق الثاني</span>
+            </button>
+        </div>
+    </div>
+
+    <div id="pl-buzzer-screen" class="pl-buzzer-container" style="display: none;">
+
+        <header class="pl-header">
+            <div class="pr-logo-wrapper"
+                style="justify-content: center; height: 110px; margin-top: 15px; margin-bottom: 10px;">
+                <div class="logo-base" style="transform: scale(0.35); transform-origin: top center;">
+                    <div class="word word-hurouf pop-in">حروف</div>
+                    <div class="word word-maa pop-in">مـــــع</div>
+                    <div class="word word-diwan pop-in" id="pl-comp-name">الديوان</div>
+                </div>
+            </div>
+
+            <h1 id="pl-team-name" class="pl-team-name">اسم الفريق</h1>
+
+            <div class="pl-single-scoreboard">
+                <span class="pl-score-label">نقاطنا:</span>
+                <span class="pl-points" id="pl-team-score">0</span>
+            </div>
+
+            <div id="pl-status" class="pl-status pl-waiting">في انتظار السؤال... ⏳</div>
+        </header>
+
+        <div class="pl-buzzer-wrapper">
+            <div class="background-button" id="pl-buzzer-btn">
+                <button class="button" id="pl-buzzer-inner-btn">
+                    اضغط!
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script src="db.js"></script>
+
+    <script src="player.js"></script>
+</body>
+
+</html>

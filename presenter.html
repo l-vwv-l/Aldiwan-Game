@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم المقدم - الديوان</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lalezar&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="pr-body">
+
+    <div id="game-bg-glass"></div>
+
+    <div class="pr-floating-status">🟢 متصل بالشاشة</div>
+
+    <div class="pr-container">
+
+        <div class="pr-qa-section">
+
+            <div class="pr-logo-wrapper">
+                <div class="logo-base" style="transform: scale(0.45); transform-origin: top right;">
+                    <div class="word word-hurouf pop-in" style="opacity: 1;">حروف</div>
+                    <div class="word word-maa pop-in" style="opacity: 1;">مـــــع</div>
+                    <div class="word word-diwan pop-in" id="pr-comp-name" style="opacity: 1;">الديوان</div>
+                </div>
+            </div>
+
+            <div class="pr-qa-card">
+                <div class="pr-letter-badge" id="pr-active-letter">؟</div>
+                <div class="pr-question-box">
+                    <h3 class="pr-q-label">السؤال:</h3>
+                    <p id="pr-question-text">يرجى اختيار حرف من اللوحة لبدء الجولة...</p>
+                </div>
+                <div class="pr-answer-box">
+                    <h3 class="pr-a-label">الإجابة الصحيحة:</h3>
+                    <p id="pr-answer-text">---</p>
+                </div>
+            </div>
+
+            <div class="pr-actions">
+                <button class="pr-action-btn pr-btn-team1">
+                    صح للفريق الأول ✔️
+                </button>
+                <button class="pr-action-btn pr-btn-team2">
+                    صح للفريق الثاني ✔️
+                </button>
+                <button class="pr-action-btn pr-btn-wrong">
+                    إجابة خاطئة ❌
+                </button>
+            </div>
+
+        </div>
+
+        <div class="pr-board-section">
+
+            <button class="uiverse-btn btn-orange pr-random-btn">
+                <span class="btn-content">اختيار حرف عشوائي 🎲</span>
+            </button>
+
+            <div class="pr-board-wrapper">
+                <div id="board-container" class="pr-mini-board">
+                    <div class="board-row">
+                        <button class="board-hex pr-hex"><span>ص</span></button>
+                        <button class="board-hex pr-hex"><span>ل</span></button>
+                        <button class="board-hex pr-hex"><span>خ</span></button>
+                        <button class="board-hex pr-hex"><span>و</span></button>
+                        <button class="board-hex pr-hex"><span>م</span></button>
+                    </div>
+                    <div class="board-row pr-indent">
+                        <button class="board-hex pr-hex"><span>ت</span></button>
+                        <button class="board-hex pr-hex"><span>غ</span></button>
+                        <button class="board-hex pr-hex"><span>ز</span></button>
+                        <button class="board-hex pr-hex"><span>د</span></button>
+                        <button class="board-hex pr-hex"><span>ش</span></button>
+                    </div>
+                    <div class="board-row">
+                        <button class="board-hex pr-hex"><span>أ</span></button>
+                        <button class="board-hex pr-hex"><span>ع</span></button>
+                        <button class="board-hex pr-hex"><span>ف</span></button>
+                        <button class="board-hex pr-hex"><span>ط</span></button>
+                        <button class="board-hex pr-hex"><span>ك</span></button>
+                    </div>
+                    <div class="board-row pr-indent">
+                        <button class="board-hex pr-hex"><span>س</span></button>
+                        <button class="board-hex pr-hex"><span>ب</span></button>
+                        <button class="board-hex pr-hex"><span>ح</span></button>
+                        <button class="board-hex pr-hex"><span>ي</span></button>
+                        <button class="board-hex pr-hex"><span>ض</span></button>
+                    </div>
+                    <div class="board-row">
+                        <button class="board-hex pr-hex"><span>ج</span></button>
+                        <button class="board-hex pr-hex"><span>ر</span></button>
+                        <button class="board-hex pr-hex"><span>ذ</span></button>
+                        <button class="board-hex pr-hex"><span>ق</span></button>
+                        <button class="board-hex pr-hex"><span>هـ</span></button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.1/firebase-database-compat.js"></script>
+    <script src="db.js"></script>
+
+    <script src="presenter.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1897 @@
+/* ================= إعدادات خطك الخاص للشعار ================= */
+@font-face {
+    font-family: 'DiwanFont';
+    src: url('MarhabanArabicDEMO-BoldOblique.otf') format('opentype');
+}
+
+/* 👈 متغيرات الألوان التفاعلية للفرق */
+:root {
+    --gap-y: 15.5vh;
+    --gap-x: 13.5vh;
+    --start-y: 6vh;
+    --edge-l: -2vh;
+    --edge-r: -2vh;
+
+    --team1-color: #FF9100;
+    /* افتراضي برتقالي */
+    --team2-color: #10b981;
+    /* افتراضي أخضر */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #3a1c4a;
+    background-image: radial-gradient(circle at center, #642b85, #2e1147);
+    color: white;
+    height: 100vh;
+    overflow: hidden;
+    font-family: 'Lalezar', cursive, sans-serif;
+}
+
+/* ================= طبقة الزجاج ================= */
+#glass-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glass-hex {
+    position: absolute;
+    width: 14vh;
+    height: 16vh;
+    background: rgba(138, 74, 184, 0.4);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    transform: rotate(90deg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    animation: fadeInHex 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes fadeInHex {
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeOutHexReverse {
+    to {
+        opacity: 0;
+        transform: scale(0.5) translateY(-50px) rotate(90deg);
+    }
+}
+
+.glass-hex span {
+    font-family: 'Lalezar', cursive;
+    font-size: 8.5vh;
+    color: rgba(158, 94, 204, 0.95);
+    text-shadow: -2px -2px 3px rgba(255, 255, 255, 0.3), 3px 3px 5px rgba(0, 0, 0, 0.5);
+}
+
+.glass-hex.left-side span {
+    transform: rotate(-105deg);
+}
+
+.glass-hex.right-side span {
+    transform: rotate(-75deg);
+}
+
+.hex-l1 {
+    top: calc(var(--start-y) + 0 * var(--gap-y));
+    left: var(--edge-l);
+    animation-delay: 1.1s;
+}
+
+.hex-l3 {
+    top: calc(var(--start-y) + 1 * var(--gap-y));
+    left: var(--edge-l);
+    animation-delay: 0.2s;
+}
+
+.hex-l5 {
+    top: calc(var(--start-y) + 2 * var(--gap-y));
+    left: var(--edge-l);
+    animation-delay: 1.4s;
+}
+
+.hex-l7 {
+    top: calc(var(--start-y) + 3 * var(--gap-y));
+    left: var(--edge-l);
+    animation-delay: 0.5s;
+}
+
+.hex-l9 {
+    top: calc(var(--start-y) + 4 * var(--gap-y));
+    left: var(--edge-l);
+    animation-delay: 1.8s;
+}
+
+.hex-l11 {
+    top: calc(var(--start-y) + 5 * var(--gap-y));
+    left: var(--edge-l);
+    animation-delay: 0.8s;
+}
+
+.hex-l13 {
+    top: calc(var(--start-y) + 6 * var(--gap-y));
+    left: var(--edge-l);
+    animation-delay: 0.3s;
+}
+
+.hex-l2 {
+    top: calc(var(--start-y) + 0.5 * var(--gap-y));
+    left: calc(var(--edge-l) + var(--gap-x));
+    animation-delay: 0.6s;
+}
+
+.hex-l4 {
+    top: calc(var(--start-y) + 1.5 * var(--gap-y));
+    left: calc(var(--edge-l) + var(--gap-x));
+    animation-delay: 1.7s;
+}
+
+.hex-l6 {
+    top: calc(var(--start-y) + 2.5 * var(--gap-y));
+    left: calc(var(--edge-l) + var(--gap-x));
+    animation-delay: 0.1s;
+}
+
+.hex-l8 {
+    top: calc(var(--start-y) + 3.5 * var(--gap-y));
+    left: calc(var(--edge-l) + var(--gap-x));
+    animation-delay: 1.2s;
+}
+
+.hex-l10 {
+    top: calc(var(--start-y) + 4.5 * var(--gap-y));
+    left: calc(var(--edge-l) + var(--gap-x));
+    animation-delay: 0.9s;
+}
+
+.hex-l12 {
+    top: calc(var(--start-y) + 5.5 * var(--gap-y));
+    left: calc(var(--edge-l) + var(--gap-x));
+    animation-delay: 1.5s;
+}
+
+.hex-l14 {
+    top: calc(var(--start-y) + 6.5 * var(--gap-y));
+    left: calc(var(--edge-l) + var(--gap-x));
+    animation-delay: 0.4s;
+}
+
+.hex-r1 {
+    top: calc(var(--start-y) + 0 * var(--gap-y));
+    right: var(--edge-r);
+    animation-delay: 0.4s;
+}
+
+.hex-r3 {
+    top: calc(var(--start-y) + 1 * var(--gap-y));
+    right: var(--edge-r);
+    animation-delay: 1.6s;
+}
+
+.hex-r5 {
+    top: calc(var(--start-y) + 2 * var(--gap-y));
+    right: var(--edge-r);
+    animation-delay: 0.1s;
+}
+
+.hex-r7 {
+    top: calc(var(--start-y) + 3 * var(--gap-y));
+    right: var(--edge-r);
+    animation-delay: 1.1s;
+}
+
+.hex-r9 {
+    top: calc(var(--start-y) + 4 * var(--gap-y));
+    right: var(--edge-r);
+    animation-delay: 0.7s;
+}
+
+.hex-r11 {
+    top: calc(var(--start-y) + 5 * var(--gap-y));
+    right: var(--edge-r);
+    animation-delay: 1.3s;
+}
+
+.hex-r13 {
+    top: calc(var(--start-y) + 6 * var(--gap-y));
+    right: var(--edge-r);
+    animation-delay: 0.5s;
+}
+
+.hex-r2 {
+    top: calc(var(--start-y) + 0.5 * var(--gap-y));
+    right: calc(var(--edge-r) + var(--gap-x));
+    animation-delay: 1.5s;
+}
+
+.hex-r4 {
+    top: calc(var(--start-y) + 1.5 * var(--gap-y));
+    right: calc(var(--edge-r) + var(--gap-x));
+    animation-delay: 0.3s;
+}
+
+.hex-r6 {
+    top: calc(var(--start-y) + 2.5 * var(--gap-y));
+    right: calc(var(--edge-r) + var(--gap-x));
+    animation-delay: 1.8s;
+}
+
+.hex-r8 {
+    top: calc(var(--start-y) + 3.5 * var(--gap-y));
+    right: calc(var(--edge-r) + var(--gap-x));
+    animation-delay: 0.8s;
+}
+
+.hex-r10 {
+    top: calc(var(--start-y) + 4.5 * var(--gap-y));
+    right: calc(var(--edge-r) + var(--gap-x));
+    animation-delay: 0.2s;
+}
+
+.hex-r12 {
+    top: calc(var(--start-y) + 5.5 * var(--gap-y));
+    right: calc(var(--edge-r) + var(--gap-x));
+    animation-delay: 1.2s;
+}
+
+.hex-r14 {
+    top: calc(var(--start-y) + 6.5 * var(--gap-y));
+    right: calc(var(--edge-r) + var(--gap-x));
+    animation-delay: 0.9s;
+}
+
+/* ================= 1. الشعار وتأثير الـ 3D ================= */
+#welcome-screen {
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+    pointer-events: none;
+    transform-origin: center;
+}
+
+#logo-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    transition: all 1s cubic-bezier(0.25, 1, 0.5, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.move-up {
+    top: 25% !important;
+    transform: translate(-50%, -50%) scale(0.85) !important;
+}
+
+.logo-base {
+    position: relative;
+    width: 300px;
+    height: 280px;
+    transform: rotate(-8deg);
+}
+
+.word {
+    position: absolute;
+    line-height: 1;
+    opacity: 0;
+    transform: scale(0.2);
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: 'DiwanFont', sans-serif;
+}
+
+.pop-in {
+    opacity: 1 !important;
+    transform: scale(1) !important;
+}
+
+.word-hurouf {
+    top: 0;
+    right: 10px;
+    color: #FFD700;
+    font-size: 9rem;
+    z-index: 3;
+    text-shadow: 1px 1px 0 #b38f00, 2px 2px 0 #b38f00, 3px 3px 0 #b38f00, 4px 4px 0 #b38f00, 5px 5px 0 #b38f00, 6px 6px 0 #b38f00, 7px 7px 0 #b38f00, 10px 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+.word-maa {
+    top: 80px;
+    right: 60px;
+    color: #4dd0e1;
+    font-size: 7.5rem;
+    z-index: 2;
+    text-shadow: 1px 1px 0 #00838f, 2px 2px 0 #00838f, 3px 3px 0 #00838f, 4px 4px 0 #00838f, 8px 8px 10px rgba(0, 0, 0, 0.6);
+}
+
+.word-diwan {
+    top: 150px;
+    right: -15px;
+    color: #ff5252;
+    font-size: 8rem;
+    z-index: 1;
+    text-shadow: 1px 1px 0 #c62828, 2px 2px 0 #c62828, 3px 3px 0 #c62828, 4px 4px 0 #c62828, 5px 5px 0 #c62828, 6px 6px 0 #c62828, 7px 7px 0 #c62828, 10px 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+/* ================= 2. الأزرار ================= */
+#lobby-controls {
+    position: absolute;
+    top: 60%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.8s ease;
+}
+
+#mobile-controls,
+#tv-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.show-controls {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+.uiverse-btn {
+    appearance: none;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+    padding: 0;
+    position: relative;
+    width: 280px;
+    font-family: 'Lalezar', cursive;
+    pointer-events: auto;
+}
+
+.btn-content {
+    display: block;
+    font-size: 2.2rem;
+    padding: 12px 24px;
+    color: white;
+    border-radius: 16px;
+    transform: translateY(-8px);
+    transition: transform 0.1s ease;
+}
+
+.btn-green .btn-content {
+    background-color: #00E676;
+    border: 2px solid #00A355;
+}
+
+.btn-green {
+    background-color: #00A355;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.btn-orange .btn-content {
+    background-color: #FF9100;
+    border: 2px solid #b36600;
+}
+
+.btn-orange {
+    background-color: #b36600;
+    border-radius: 16px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4);
+}
+
+.uiverse-btn:active .btn-content {
+    transform: translateY(-2px);
+}
+
+/* ================= 3. رسالة الانتظار ووضعية التلفزيون ================= */
+.hidden-message {
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 70%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 3rem;
+    font-family: 'Lalezar', cursive;
+    color: #ffd700;
+    text-shadow: 0 0 15px rgba(255, 215, 0, 0.5), 2px 2px 4px rgba(0, 0, 0, 0.8);
+    transition: opacity 1s ease;
+    z-index: 10;
+    text-align: center;
+}
+
+.show-message {
+    opacity: 1 !important;
+}
+
+.floating-logo {
+    animation: floatCenter 3s ease-in-out infinite !important;
+}
+
+@keyframes floatCenter {
+    0% {
+        transform: translate(-50%, -50%) rotate(-8deg);
+    }
+
+    50% {
+        transform: translate(-50%, calc(-50% - 15px)) rotate(-8deg);
+    }
+
+    100% {
+        transform: translate(-50%, -50%) rotate(-8deg);
+    }
+}
+
+/* ================= إضافات شاشات الانتقال 🎬 ================= */
+#transition-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 90;
+    pointer-events: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#transition-logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 95;
+}
+
+.hex-shape {
+    position: absolute;
+    width: 10px;
+    height: 10px;
+    background-color: #642b85;
+    clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+    opacity: 0;
+    transform: scale(1) rotate(90deg);
+}
+
+.expand-hex-anim {
+    animation: expandHex 1s cubic-bezier(0.5, 0, 0.2, 1) forwards;
+}
+
+@keyframes expandHex {
+    0% {
+        opacity: 1;
+        transform: scale(1) rotate(90deg);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(500) rotate(270deg);
+    }
+}
+
+#round-title-wrapper {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.2);
+    opacity: 0;
+    z-index: 96;
+}
+
+#round-title {
+    font-family: 'DiwanFont', sans-serif;
+    transform: rotate(-8deg);
+    display: flex;
+    align-items: baseline;
+    gap: 15px;
+}
+
+.round-word-aljawla {
+    font-family: 'DiwanFont', sans-serif !important;
+    color: #ff5252;
+    font-size: 8rem;
+    text-shadow: 1px 1px 0 #c62828, 2px 2px 0 #c62828, 3px 3px 0 #c62828, 4px 4px 0 #c62828, 5px 5px 0 #c62828, 6px 6px 0 #c62828, 7px 7px 0 #c62828, 10px 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+.round-word-aloula {
+    font-family: 'DiwanFont', sans-serif !important;
+    color: #FFD700;
+    font-size: 9rem;
+    text-shadow: 1px 1px 0 #b38f00, 2px 2px 0 #b38f00, 3px 3px 0 #b38f00, 4px 4px 0 #b38f00, 5px 5px 0 #b38f00, 6px 6px 0 #b38f00, 7px 7px 0 #b38f00, 10px 10px 15px rgba(0, 0, 0, 0.6);
+}
+
+.show-round {
+    animation: showRoundAnim 1.8s ease forwards;
+}
+
+@keyframes showRoundAnim {
+    0% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0.2);
+    }
+
+    20% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1.1);
+    }
+
+    80% {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(1.5);
+    }
+}
+
+/* ================= 4. شاشة اللعب وقوانينها الصحيحة ================= */
+.hidden-screen {
+    display: none;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 100;
+}
+
+.show-screen {
+    display: block !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+}
+
+#game-bg-glass {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #3a1c4a;
+    background-image: radial-gradient(circle at center, #642b85, #2e1147);
+    z-index: -1;
+}
+
+.game-top-bar {
+    position: absolute;
+    top: 4vh;
+    width: 100%;
+    height: 10vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0;
+    z-index: 10;
+}
+
+.top-center-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    align-items: center;
+    gap: 6vw;
+}
+
+.team-score-card {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    height: 8vh;
+    border-top: 2px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
+}
+
+.team-card-right {
+    right: 0;
+    border-radius: 40px 0 0 40px;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.team-card-left {
+    left: 0;
+    border-radius: 0 40px 40px 0;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+}
+
+.team-name-box {
+    font-family: 'Lalezar', cursive;
+    color: white;
+    font-size: 2.2rem;
+    padding: 0 20px;
+    white-space: nowrap;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+.score-hex {
+    position: relative;
+    width: 10vh;
+    height: 11.5vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+    transform: scale(1.15);
+}
+
+.team-card-right .score-hex {
+    background-color: var(--team1-color);
+    margin-left: -3vh;
+}
+
+.team-card-left .score-hex {
+    background-color: var(--team2-color);
+    margin-right: -3vh;
+}
+
+.score-hex span {
+    font-family: 'Lalezar', cursive;
+    font-size: 4rem;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    transform: translateY(5px);
+}
+
+#round-title-mini {
+    font-family: 'DiwanFont', sans-serif;
+    transform: rotate(-12deg);
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.round-word-aljawla-mini {
+    font-family: 'DiwanFont', sans-serif !important;
+    color: #ff5252;
+    font-size: 4rem;
+    text-shadow: 1px 1px 0 #c62828, 2px 2px 0 #c62828, 3px 3px 0 #c62828, 4px 4px 5px rgba(0, 0, 0, 0.6);
+}
+
+.round-word-aloula-mini {
+    font-family: 'DiwanFont', sans-serif !important;
+    color: #FFD700;
+    font-size: 5rem;
+    text-shadow: 1px 1px 0 #b38f00, 2px 2px 0 #b38f00, 3px 3px 0 #b38f00, 4px 4px 5px rgba(0, 0, 0, 0.6);
+}
+
+.game-logo-mini {
+    position: relative;
+    width: 200px;
+    height: 130px;
+    transform: rotate(-15deg);
+}
+
+.square-board-wrapper {
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(15, 0, 30, 0.7);
+    border: 3px solid rgba(255, 255, 255, 0.15);
+    border-radius: 25px;
+    width: 90vh;
+    max-width: 95vw;
+    aspect-ratio: 16 / 10;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.board-paths-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    opacity: 1;
+    border-radius: 12px;
+}
+
+.path-team1-right {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--team1-color);
+    clip-path: polygon(100% 0, 100% 100%, 50% 50%);
+}
+
+.path-team1-left {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--team1-color);
+    clip-path: polygon(0 0, 0 100%, 50% 50%);
+}
+
+.path-team2-top {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--team2-color);
+    clip-path: polygon(0 0, 100% 0, 50% 50%);
+}
+
+.path-team2-bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: var(--team2-color);
+    clip-path: polygon(0 100%, 100% 100%, 50% 50%);
+}
+
+#board-container {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    transform: translate(2.5vh, -1.4vh);
+}
+
+.board-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: -2.87vh;
+}
+
+.indent-row {
+    transform: translateX(-5vh);
+}
+
+.board-hex {
+    appearance: none;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    position: relative;
+    width: 10vh;
+    height: 11.5vh;
+    background-color: #642b85;
+
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+
+    transform: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    opacity: 0;
+    transition: transform 0.1s ease, filter 0.1s ease;
+}
+
+.board-hex::before {
+    content: '';
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    right: 4px;
+    bottom: 4px;
+    background-color: white;
+
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    -webkit-mask-size: 100% 100%;
+    -webkit-mask-repeat: no-repeat;
+    mask-image: url("data:image/svg+xml,%3Csvg width='87' height='100' viewBox='0 0 87 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M43.3 0C46 0 48.5 1 50.4 2.1L80.7 19.6C84.4 21.8 86.6 25.6 86.6 29.9V69.9C86.6 74.2 84.4 78 80.7 80.2L50.4 97.7C48.5 98.8 46 99.8 43.3 99.8C40.6 99.8 38.1 98.8 36.2 97.7L5.9 80.2C2.2 78 0 74.2 0 69.9V29.9C0 25.6 2.2 21.8 5.9 19.6L36.2 2.1C38.1 1 40.6 0 43.3 0Z' fill='black'/%3E%3C/svg%3E");
+    mask-size: 100% 100%;
+    mask-repeat: no-repeat;
+
+    z-index: 0;
+    transition: background-color 0.2s ease;
+}
+
+.board-hex:hover::before {
+    background-color: #f0f0f0;
+}
+
+.board-hex:active {
+    transform: scale(0.95);
+    filter: brightness(0.8);
+}
+
+.board-hex span {
+    position: relative;
+    z-index: 1;
+    font-family: 'Lalezar', cursive;
+    font-size: 4.8vh;
+    color: #642b85;
+    transform: none;
+    text-shadow: none;
+}
+
+.drop-in-hex {
+    animation: dropInHexAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+@keyframes dropInHexAnim {
+    0% {
+        opacity: 0;
+        transform: scale(0.5) translateY(-50px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* ================= 5. القائمة العائمة ================= */
+.button-box {
+    position: absolute;
+    bottom: 30px;
+    left: 30px;
+    width: 4rem;
+    height: 4rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 90;
+}
+
+.button-box .button {
+    width: 3.5rem;
+    height: 3.5rem;
+    position: absolute;
+    cursor: pointer;
+    border: 3px solid #311703;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    opacity: 0;
+    box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.4), 0 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+.button-box .icon {
+    width: 26px;
+    height: 26px;
+    opacity: 0.9;
+    transition: 0.3s;
+}
+
+.button-box .main-btn {
+    opacity: 1;
+    z-index: 50;
+    background: #019b98;
+}
+
+.button-box .exit-btn {
+    z-index: 40;
+    background: #ff7f50;
+}
+
+.button-box .extra-btn {
+    z-index: 30;
+    background: #ffd700;
+}
+
+.button-box.open .main-btn .icon {
+    animation: rotateActive 2.2s linear infinite;
+}
+
+.button-box.open .exit-btn {
+    opacity: 1;
+    transform: translateY(-130%);
+}
+
+.button-box.open .extra-btn {
+    opacity: 1;
+    transform: translateX(130%);
+}
+
+@keyframes rotateActive {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* ================= 6. شاشة الإعدادات ================= */
+#settings-page,
+#questions-portal-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+    background-color: #3a1c4a;
+    background-image: radial-gradient(circle at center, #642b85, #2e1147);
+    z-index: 200;
+}
+
+.settings-page-content {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2vh 0 5vh 0;
+    z-index: 10;
+}
+
+.settings-logo {
+    height: 150px;
+    margin-bottom: 20px;
+}
+
+.settings-form {
+    width: 90%;
+    max-width: 700px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.setting-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.setting-label {
+    font-family: 'Lalezar', cursive;
+    color: white;
+    font-size: 1.6rem;
+    width: 35%;
+    text-align: right;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.setting-control {
+    width: 65%;
+    display: flex;
+    justify-content: center;
+}
+
+.sp-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.sp-input {
+    width: 100%;
+    background: transparent;
+    border: 2px solid white;
+    border-radius: 50px;
+    padding: 10px 20px;
+    font-family: 'Lalezar', cursive;
+    font-size: 1.4rem;
+    color: white;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.sp-input:focus {
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+select.sp-input option {
+    background-color: #3a1c4a;
+    color: white;
+}
+
+.sp-segmented {
+    display: flex;
+    width: 100%;
+    border: 2px solid white;
+    border-radius: 50px;
+    overflow: hidden;
+}
+
+.sp-seg-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-left: 2px solid rgba(255, 255, 255, 0.3);
+    padding: 10px 0;
+    font-family: 'Lalezar', cursive;
+    font-size: 1.3rem;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sp-seg-btn:first-child {
+    border-left: none;
+}
+
+.sp-seg-btn:last-child {
+    border-left: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.sp-seg-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sp-seg-btn.active {
+    background: white;
+    color: #3a1c4a;
+}
+
+/* ================= 7. شريط الألوان ================= */
+.container-items {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    transform-style: preserve-3d;
+    transform: perspective(1000px);
+}
+
+.item-color {
+    position: relative;
+    flex-shrink: 0;
+    width: 32px;
+    height: 40px;
+    border: none;
+    outline: none;
+    background: transparent;
+    transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    cursor: pointer;
+}
+
+.item-color::after {
+    position: absolute;
+    content: "";
+    inset: 0;
+    width: 40px;
+    height: 40px;
+    background-color: var(--color);
+    border-radius: 6px;
+    transform: scale(1.2);
+    pointer-events: none;
+    transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.4);
+}
+
+.item-color::before {
+    position: absolute;
+    content: attr(aria-color);
+    left: 50%;
+    bottom: 55px;
+    font-family: 'Lalezar', cursive;
+    font-size: 14px;
+    line-height: 20px;
+    transform: translateX(-50%);
+    padding: 2px 10px;
+    background-color: #ffffff;
+    color: #3a1c4a;
+    border-radius: 8px;
+    pointer-events: none;
+    opacity: 0;
+    visibility: hidden;
+    transition: 500ms cubic-bezier(0.175, 0.885, 0.32, 1.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    white-space: nowrap;
+}
+
+.item-color:hover {
+    transform: scale(1.5);
+    z-index: 99999;
+}
+
+.item-color:hover::before {
+    opacity: 1;
+    visibility: visible;
+}
+
+.item-color:active::after {
+    transform: scale(1.1);
+}
+
+.item-color:focus::before {
+    content: "✅ تم";
+    color: #00A355;
+}
+
+.item-color:hover+* {
+    transform: scale(1.3);
+    z-index: 9999;
+}
+
+.item-color:hover+*+* {
+    transform: scale(1.15);
+    z-index: 999;
+}
+
+.item-color:has(+ *:hover) {
+    transform: scale(1.3);
+    z-index: 9999;
+}
+
+.item-color:has(+ * + *:hover) {
+    transform: scale(1.15);
+    z-index: 999;
+}
+
+.item-color.selected-color::after {
+    border: 3px solid white;
+    transform: scale(1.35);
+    box-shadow: 0 0 15px var(--color);
+}
+
+/* ================= 8. أنيميشن الانتقال الناعم ================= */
+#welcome-screen,
+#settings-page,
+#questions-portal-screen {
+    transition: opacity 0.5s ease;
+}
+
+.fade-in-up {
+    animation: fadeInUpAnim 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards !important;
+}
+
+.fade-out-down {
+    animation: fadeOutDownAnim 0.4s ease forwards !important;
+}
+
+@keyframes fadeInUpAnim {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOutDownAnim {
+    0% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+}
+
+/* ================= 9. شاشة بوابة الأسئلة ================= */
+#questions-portal-screen {
+    z-index: 250;
+}
+
+.portal-content {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 5vh 0;
+    z-index: 10;
+}
+
+.portal-back-btn {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 50%;
+    width: 60px;
+    height: 60px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.portal-back-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: scale(1.1);
+}
+
+.portal-back-btn svg {
+    width: 30px;
+    height: 30px;
+}
+
+.portal-title {
+    font-family: 'DiwanFont', sans-serif;
+    color: #FFD700;
+    font-size: 4rem;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6);
+    margin-bottom: 20px;
+}
+
+.portal-input-area {
+    width: 80%;
+    max-width: 600px;
+    background: rgba(15, 0, 30, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.15);
+    border-radius: 20px;
+    padding: 30px;
+    min-height: 200px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 30px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+}
+
+#portal-instruction {
+    font-family: 'Lalezar', cursive;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 1.8rem;
+    text-align: center;
+}
+
+.portal-letter-badge {
+    font-family: 'Lalezar', cursive;
+    background: #00E676;
+    color: #1a0a2a;
+    width: 60px;
+    height: 60px;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2.5rem;
+    margin: 0 auto 20px auto;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+}
+
+.portal-input {
+    width: 100%;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    font-family: 'Lalezar', cursive;
+    font-size: 1.5rem;
+    color: white;
+    margin-bottom: 15px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+.portal-input::placeholder {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.portal-input:focus {
+    border-color: #FFD700;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.portal-save-btn {
+    flex: 1;
+    background: #00E676;
+    color: #1a0a2a;
+    border: none;
+    border-radius: 15px;
+    padding: 12px;
+    font-family: 'Lalezar', cursive;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.portal-save-btn:active {
+    transform: translateY(3px);
+}
+
+.portal-delete-btn {
+    flex: 0.4;
+    background: #ff5252;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    padding: 12px;
+    font-family: 'Lalezar', cursive;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+    transition: transform 0.2s ease;
+}
+
+.portal-delete-btn:active {
+    transform: translateY(3px);
+}
+
+.portal-keyboard {
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+}
+
+.portal-key {
+    width: 60px;
+    height: 60px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 15px;
+    color: white;
+    font-family: 'Lalezar', cursive;
+    font-size: 2rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+}
+
+.portal-key:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-3px);
+}
+
+.portal-key.active-key {
+    background: #FF9100;
+    border-color: #FFD700;
+    color: #1a0a2a;
+    transform: scale(1.1);
+}
+
+.portal-key.has-data {
+    border-bottom: 4px solid #00E676;
+}
+
+/* ================= 10. شاشة لوحة تحكم المقدم ================= */
+.pr-body {
+    overflow-x: hidden;
+    padding: 20px 0;
+}
+
+.pr-floating-status {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-family: 'Lalezar', cursive;
+    color: #00E676;
+    font-size: 1.4rem;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 8px 20px;
+    border-radius: 50px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 50;
+}
+
+.pr-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 20px;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+    .pr-container {
+        flex-direction: row;
+        align-items: flex-start;
+        margin-top: 40px;
+    }
+
+    .pr-qa-section {
+        flex: 1.1;
+    }
+
+    .pr-board-section {
+        flex: 1;
+    }
+}
+
+.pr-qa-section {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.pr-logo-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    height: 120px;
+    margin-bottom: 20px;
+}
+
+.pr-logo-wrapper .logo-base {
+    transform: scale(0.45) !important;
+    transform-origin: top right;
+}
+
+.pr-qa-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 20px;
+    padding: 25px 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.pr-letter-badge {
+    position: absolute;
+    top: -25px;
+    right: 25px;
+    background: #FFD700;
+    color: #3a1c4a;
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Lalezar', cursive;
+    font-size: 2rem;
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+.pr-q-label,
+.pr-a-label {
+    font-family: 'Lalezar', cursive;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+#pr-question-text {
+    font-family: 'Lalezar', cursive;
+    font-size: 1.8rem;
+    color: white;
+    line-height: 1.4;
+}
+
+.pr-answer-box {
+    background: rgba(0, 230, 118, 0.1);
+    border: 1px dashed #00E676;
+    border-radius: 10px;
+    padding: 15px;
+}
+
+#pr-answer-text {
+    font-family: 'Lalezar', cursive;
+    font-size: 1.8rem;
+    color: #00E676;
+}
+
+.pr-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.pr-action-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 15px;
+    font-family: 'Lalezar', cursive;
+    font-size: 1.6rem;
+    cursor: pointer;
+    color: white;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s ease, filter 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.pr-action-btn:active {
+    transform: translateY(3px);
+}
+
+.pr-action-btn:hover {
+    filter: brightness(1.1);
+}
+
+.pr-btn-team1 {
+    background-color: var(--team1-color, #FF9100);
+}
+
+.pr-btn-team2 {
+    background-color: var(--team2-color, #10b981);
+}
+
+.pr-btn-wrong {
+    background-color: #ff5252;
+}
+
+.pr-board-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+}
+
+.pr-random-btn {
+    width: 100%;
+    max-width: 350px;
+}
+
+.pr-board-wrapper {
+    background: rgba(15, 0, 30, 0.5);
+    border-radius: 20px;
+    padding: 20px;
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    min-height: 400px;
+    overflow: hidden;
+}
+
+.pr-mini-board {
+    transform: scale(0.70) !important;
+    transform-origin: center;
+    margin: 0 !important;
+}
+
+@media (max-width: 500px) {
+    .pr-mini-board {
+        transform: scale(0.55) !important;
+    }
+
+    .pr-board-wrapper {
+        min-height: 350px;
+    }
+}
+
+.pr-indent {
+    transform: translateX(-5vh);
+}
+
+.pr-mini-board .board-hex {
+    opacity: 1;
+}
+
+/* ================= 11. شاشة المتسابقين (زر الطوارئ ولوحة النتائج الفردية) ================= */
+.pl-body {
+    overflow: hidden;
+    touch-action: manipulation;
+}
+
+.pl-selection-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 0, 30, 0.85);
+    backdrop-filter: blur(15px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 300;
+}
+
+.pl-selection-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+    padding: 40px 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+}
+
+.pl-title {
+    font-family: 'Lalezar', cursive;
+    color: #FFD700;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.pl-btn-t1 .btn-content {
+    background-color: var(--team1-color, #FF9100);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pl-btn-t1 {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pl-btn-t2 .btn-content {
+    background-color: var(--team2-color, #10b981);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+
+.pl-btn-t2 {
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.pl-buzzer-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    width: 100%;
+    position: relative;
+    z-index: 10;
+}
+
+.pl-header {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6), transparent);
+    padding: 10px 10px 0 10px;
+}
+
+/* 👈 التعديل الجذري لاسم الفريق في شاشة الجوال */
+.pl-team-name {
+    font-family: 'Lalezar', cursive;
+    color: white;
+    font-size: 2.5rem;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.4);
+    padding: 5px 30px;
+    border-radius: 50px;
+    border-bottom: 3px solid var(--pl-active-color);
+    margin-top: 10px;
+    /* مسافة من فوق عشان يبعد عن الشعار */
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.pl-single-scoreboard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+    background: rgba(0, 0, 0, 0.4);
+    border-radius: 15px;
+    padding: 8px 30px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+}
+
+.pl-score-label {
+    font-family: 'Lalezar', cursive;
+    font-size: 1.6rem;
+    color: white;
+}
+
+.pl-points {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 5px 20px;
+    border-radius: 10px;
+    font-family: 'Lalezar', cursive;
+    font-size: 2.2rem;
+    font-weight: bold;
+    color: var(--pl-active-color);
+    border: 2px solid var(--pl-active-color);
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.pl-status {
+    font-family: 'Lalezar', cursive;
+    font-size: 1.4rem;
+    padding: 8px 25px;
+    border-radius: 50px;
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
+}
+
+.pl-waiting {
+    color: #FFD700;
+}
+
+.pl-go {
+    color: #00E676;
+    border-color: #00E676;
+    background: rgba(0, 230, 118, 0.2);
+    animation: pulseStatus 1s infinite;
+}
+
+@keyframes pulseStatus {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.05);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.pl-buzzer-wrapper {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-bottom: 50px;
+}
+
+.background-button {
+    background: repeating-linear-gradient(45deg, #1a0a2a 0 20px, var(--pl-active-color, #ff9c00) 20px 40px);
+    width: 65vw;
+    max-width: 320px;
+    height: 65vw;
+    max-height: 320px;
+    box-shadow: 15px 15px 50px 5px rgba(0, 0, 0, 0.6);
+    position: relative;
+    display: inline-block;
+    outline: 4px solid #111;
+    border-radius: 15px;
+}
+
+.background-button::before {
+    content: "";
+    position: absolute;
+    top: 15%;
+    left: 15%;
+    width: 70%;
+    height: 70%;
+    background: #3a1c4a;
+    border: 4px solid #111;
+    border-radius: 5px;
+}
+
+.background-button .button {
+    background: var(--pl-active-color, #cc2a1f);
+    width: 65%;
+    height: 65%;
+    border-radius: 50%;
+    position: absolute;
+    top: 7.5%;
+    left: 17.5%;
+    color: white;
+    font-size: 4rem;
+    font-family: 'Lalezar', cursive;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 15px 0 0 rgba(0, 0, 0, 0.6), inset 0 5px 10px rgba(255, 255, 255, 0.3);
+    transition: all .15s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    border: 4px solid #111;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.background-button .button:active,
+.background-button.active-pressed .button {
+    box-shadow: 0 2px 0 0 rgba(0, 0, 0, 0.8), inset 0 5px 10px rgba(255, 255, 255, 0.1);
+    top: 15%;
+}
+
+.pl-buzzer-locked {
+    filter: grayscale(100%) opacity(0.5);
+    pointer-events: none;
+}
+
+/* ================= 12. تنبيه التلفزيون وحالة إقفال الجرس للخصم ================= */
+.pl-locked {
+    color: #ff5252;
+    border-color: #ff5252;
+    background: rgba(255, 82, 82, 0.2);
+}
+
+#tv-buzzer-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 500;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+#tv-buzzer-overlay.show-alert {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.buzzer-alert-box {
+    background: var(--alert-color, #FFD700);
+    padding: 60px 120px;
+    border-radius: 40px;
+    box-shadow: 0 0 80px var(--alert-color, #FFD700), inset 0 0 30px rgba(255, 255, 255, 0.4);
+    transform: scale(0.5);
+    transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    text-align: center;
+    border: 6px solid white;
+}
+
+#tv-buzzer-overlay.show-alert .buzzer-alert-box {
+    transform: scale(1);
+}
+
+.buzzer-alert-title {
+    font-family: 'Lalezar', cursive;
+    font-size: 4rem;
+    color: white;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+}
+
+.buzzer-alert-team {
+    font-family: 'Lalezar', cursive;
+    font-size: 8rem;
+    color: white;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.7);
+    line-height: 1;
+}
