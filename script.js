@@ -2,16 +2,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // 🧹 تصفير الجرس وإخبار السيرفر إن التلفزيون شغال
     if (typeof db !== 'undefined') {
-        // تصفير الجرس
         db.ref('game/buzzer').set({ status: 'waiting', team: null });
+        db.ref('game/current_letter').set(null); // تصفير الحرف
 
-        // 📡 إرسال حالة التلفزيون للسيرفر (شغال أو مغلق)
         const tvStatusRef = db.ref('game/tv_status');
-        tvStatusRef.set('online'); // التلفزيون اشتغل
-        tvStatusRef.onDisconnect().set('offline'); // لو تقفل التلفزيون فجأة، السيرفر يكتب مغلق
+        tvStatusRef.set('online');
+        tvStatusRef.onDisconnect().set('offline');
     }
 
-    // 🔗 توليد الباركودات برابط موقعك الحقيقي
     const gameUrl = "https://cheerful-crepe-bcc27f.netlify.app";
 
     setTimeout(() => {
@@ -43,12 +41,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnTvStart = document.getElementById("btn-tv-start");
     const waitingMessage = document.getElementById("waiting-message");
 
-    // 1. الكلمات تنتظر الخلفية تظهر أولاً
     setTimeout(() => { w1.classList.add("pop-in"); }, 1500);
     setTimeout(() => { w2.classList.add("pop-in"); }, 1800);
     setTimeout(() => { w3.classList.add("pop-in"); }, 2100);
 
-    // 2. الشعار يرتفع والأزرار تظهر بعد المشهد
     setTimeout(() => {
         logoWrapper.classList.add("move-up");
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
@@ -85,7 +81,6 @@ document.addEventListener("DOMContentLoaded", () => {
         logoWrapper.classList.remove("move-up");
         logoWrapper.classList.remove("floating-logo");
 
-        // 📡 تصفير الجرس في السيرفر عند بدء اللعبة
         if (typeof db !== 'undefined') {
             db.ref('game/buzzer').set({ status: 'waiting', team: null });
         }
@@ -154,7 +149,6 @@ document.addEventListener("DOMContentLoaded", () => {
         btnExitGame.addEventListener("click", () => { location.reload(); });
     }
 
-    // 6. برمجة شاشة الإعدادات
     const settingsPage = document.getElementById("settings-page");
     const welcomeScreen = document.getElementById("welcome-screen");
     const btnSaveSettings = document.getElementById("btn-save-settings");
@@ -215,7 +209,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 document.documentElement.style.setProperty('--team2-color', color2);
             }
 
-            // حفظ الإعدادات للمقدم واللاعبين
             const gameSettingsData = { compName: customWord, team1Name: team1Name, team2Name: team2Name, team1Color: color1, team2Color: color2 };
             localStorage.setItem('diwanGameSettings', JSON.stringify(gameSettingsData));
 
@@ -345,9 +338,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
-    // ==========================================
-    // 📡 نظام التنبيه الذكي للتلفزيون (يتم إنشاء الشاشة برمجياً)
-    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
@@ -361,7 +351,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const tvBuzzerBox = document.getElementById('tv-buzzer-box');
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
 
-    // استماع للتنبيهات من الجوالات
     if (typeof db !== 'undefined') {
         db.ref('game/buzzer').on('value', (snapshot) => {
             const data = snapshot.val();
@@ -391,14 +380,27 @@ document.addEventListener("DOMContentLoaded", () => {
             allTvHexes.forEach(hex => {
                 const letter = hex.querySelector('span').innerText.trim();
 
-                // تنظيف الألوان القديمة
                 hex.classList.remove('team1-captured', 'team2-captured');
 
-                // تلوين حسب السيرفر
                 if (boardData[letter] === 'team1') {
                     hex.classList.add('team1-captured');
                 } else if (boardData[letter] === 'team2') {
                     hex.classList.add('team2-captured');
+                }
+            });
+        });
+
+        // 🎯 مراقبة الحرف المختار من المقدم وإبرازه في التلفزيون
+        db.ref('game/current_letter').on('value', (snapshot) => {
+            const activeLetter = snapshot.val();
+            const allTvHexes = document.querySelectorAll('#board-container .board-hex');
+
+            allTvHexes.forEach(hex => {
+                const span = hex.querySelector('span');
+                if (activeLetter && span && span.innerText.trim() === activeLetter) {
+                    hex.classList.add('active-hex');
+                } else {
+                    hex.classList.remove('active-hex');
                 }
             });
         });

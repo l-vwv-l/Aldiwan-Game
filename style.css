@@ -1917,3 +1917,10 @@ body.pr-body {
     height: auto !important;
     min-height: 100vh;
 }
+
+/* ================= 16. تمييز الحرف المختار من المقدم ================= */
+.board-hex.active-hex {
+    transform: scale(1.2) !important;
+    filter: brightness(1.5) drop-shadow(0 0 15px #FFD700) !important;
+    z-index: 10 !important;
+}
