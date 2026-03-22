@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // 🌟 السحر الجديد: توليد رقم غرفة مع حماية ضد التحديث
     let roomId = sessionStorage.getItem('diwanGameRoom');
     if (!roomId) {
         roomId = Math.floor(10000 + Math.random() * 90000).toString();
@@ -11,7 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
         db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         db.ref('rooms/' + roomId + '/current_letter').set(null);
         db.ref('rooms/' + roomId + '/board').set(null);
-        db.ref('rooms/' + roomId + '/presence').set(null); // تصفير الحضور
+        db.ref('rooms/' + roomId + '/presence').set(null); // تصفير الحضور عشان نراقب اللي يدخل
 
         const tvStatusRef = db.ref('rooms/' + roomId + '/tv_status');
         tvStatusRef.set('online');
@@ -20,7 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const gameUrl = "https://cheerful-crepe-bcc27f.netlify.app";
 
-    // 🔗 توليد الباركودات والروابط النصية أسفلها
+    // 🔗 توليد 3 باركودات مع روابط نصية تحتها
     setTimeout(() => {
         const pUrl = gameUrl + "/presenter.html?room=" + roomId;
         const t1Url = gameUrl + "/player.html?room=" + roomId + "&team=1";
@@ -48,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const w3 = document.getElementById("w3");
     const logoWrapper = document.getElementById("logo-wrapper");
     const lobbyControls = document.getElementById("lobby-controls");
+
     const tvControls = document.getElementById("tv-controls");
     const btnTvStart = document.getElementById("btn-tv-start");
 
@@ -61,8 +63,10 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { lobbyControls.classList.add("show-controls"); }, 500);
     }, 3500);
 
-    // 🚥 عند ضغط "ابدأ"
+    // 🚥 عند ضغط "ابدأ" -> نقل إلى شاشة غرفة الانتظار المليئة بالباركودات
     btnTvStart.addEventListener("click", () => {
+
+        // تحديث الألوان والأسماء في الغرفة حسب الإعدادات
         const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
         const t1Name = settings.team1Name || "الفريق الأول";
         const t2Name = settings.team2Name || "الفريق الثاني";
@@ -80,17 +84,19 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('lobby-room-id').innerText = "غرفة رقم: " + roomId;
 
         document.getElementById("welcome-screen").style.display = "none";
-        document.getElementById("lobby-screen").style.display = "flex";
+        document.getElementById("lobby-screen").style.display = "flex"; // إظهار غرفة الباركودات
     });
 
-    // 🚀 زر بدء اللعبة من داخل غرفة الانتظار
+    // 🚀 عند ضغط زر "الكل جاهز! العب" من داخل غرفة الانتظار
     document.getElementById("btn-start-from-lobby").addEventListener("click", () => {
-        document.getElementById("lobby-screen").style.display = "none";
+
+        document.getElementById("lobby-screen").style.display = "none"; // إخفاء الباركودات
 
         if (typeof db !== 'undefined') {
             db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         }
 
+        // بدء مشهد انتقال اللوحة السداسية للعبة الحقيقية
         const glassHexes = Array.from(document.querySelectorAll('#glass-layer .glass-hex')).reverse();
         glassHexes.forEach((hex, index) => {
             setTimeout(() => { hex.style.animation = "fadeOutHexReverse 0.5s ease forwards"; }, index * 40);
@@ -153,10 +159,10 @@ document.addEventListener("DOMContentLoaded", () => {
     const settingsPage = document.getElementById("settings-page");
     const welcomeScreen = document.getElementById("welcome-screen");
     const btnSaveSettings = document.getElementById("btn-save-settings");
+    const sw1 = document.getElementById("sw1"); const sw2 = document.getElementById("sw2"); const sw3 = document.getElementById("sw3");
     const settingsForm = document.getElementById("settings-form-container");
     const settingsSaveBtn = document.getElementById("settings-save-container");
     const allSettingsBtns = document.querySelectorAll(".btn-orange");
-    const sw1 = document.getElementById("sw1"); const sw2 = document.getElementById("sw2"); const sw3 = document.getElementById("sw3");
 
     allSettingsBtns.forEach(btn => {
         if (btn.innerText.includes("الإعدادات")) {
@@ -195,8 +201,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const teamNamesInGame = document.querySelectorAll(".team-name-box");
             if (teamNamesInGame.length >= 2) {
-                teamNamesInGame[0].innerText = team1Name;
-                teamNamesInGame[1].innerText = team2Name;
+                teamNamesInGame[0].innerText = team1Name; // يمين
+                teamNamesInGame[1].innerText = team2Name; // يسار
             }
 
             const compInput = document.getElementById("setting-comp-name");
@@ -221,6 +227,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const gameSettingsData = { compName: customWord, team1Name: team1Name, team2Name: team2Name, team1Color: color1, team2Color: color2 };
             localStorage.setItem('diwanGameSettings', JSON.stringify(gameSettingsData));
+
+            // رفع الإعدادات للسيرفر عشان الجوالات تقرأها بعدين! 🚀
+            if (typeof db !== 'undefined') {
+                db.ref('rooms/' + roomId + '/settings').set(gameSettingsData);
+            }
 
             settingsForm.classList.remove("fade-in-up"); settingsSaveBtn.classList.remove("fade-in-up");
             settingsForm.classList.add("fade-out-down"); settingsSaveBtn.classList.add("fade-out-down");
@@ -287,12 +298,107 @@ document.addEventListener("DOMContentLoaded", () => {
                 resetBtn.addEventListener('click', () => {
                     document.getElementById('qr-' + role + '-lobby-container').style.display = 'block';
                     document.getElementById('status-' + role + '-lobby').style.display = 'none';
+                    // نمسح الحالة من السيرفر عشان ما يرجع (تم الدخول) على طول
+                    db.ref('rooms/' + roomId + '/presence/' + role).set(null);
                 });
             }
         });
     }
 
-    // نظام التنبيه الذكي
+    const qSourceBtns = document.querySelectorAll('#q-source-toggle .sp-seg-btn');
+    const aiCategoryRow = document.getElementById('ai-category-row');
+    const btnOpenPortal = document.getElementById('btn-open-portal');
+    const portalScreen = document.getElementById('questions-portal-screen');
+    const btnBackFromPortal = document.getElementById('btn-back-from-portal');
+    const pw1 = document.getElementById("pw1"); const pw2 = document.getElementById("pw2"); const pw3 = document.getElementById("pw3");
+
+    qSourceBtns.forEach(btn => {
+        btn.addEventListener('click', function () {
+            const source = this.getAttribute('data-source');
+            if (source === 'ai') {
+                aiCategoryRow.style.display = 'flex'; document.getElementById('btn-open-portal-wrapper').style.display = 'none';
+            } else {
+                aiCategoryRow.style.display = 'none'; document.getElementById('btn-open-portal-wrapper').style.display = 'flex';
+            }
+        });
+    });
+
+    btnOpenPortal.addEventListener('click', () => {
+        settingsPage.classList.add("screen-out");
+        const compInput = document.getElementById("setting-comp-name");
+        const customWord = compInput.value.trim() || compInput.placeholder;
+        pw3.innerText = customWord;
+
+        setTimeout(() => {
+            settingsPage.style.display = "none"; settingsPage.classList.remove("screen-out");
+            portalScreen.classList.add("show-screen"); portalScreen.classList.add("screen-in");
+            setTimeout(() => portalScreen.style.opacity = "1", 50);
+            pw1.classList.remove("pop-in"); pw2.classList.remove("pop-in"); pw3.classList.remove("pop-in");
+            setTimeout(() => { pw1.classList.add("pop-in"); }, 200);
+            setTimeout(() => { pw2.classList.add("pop-in"); }, 400);
+            setTimeout(() => { pw3.classList.add("pop-in"); }, 600);
+            setTimeout(() => { portalScreen.classList.remove("screen-in"); }, 400);
+        }, 400);
+    });
+
+    btnBackFromPortal.addEventListener('click', () => {
+        portalScreen.classList.add("screen-out");
+        setTimeout(() => {
+            portalScreen.classList.remove("show-screen", "screen-out");
+            settingsPage.style.display = "block"; settingsPage.classList.add("screen-in");
+            setTimeout(() => settingsPage.style.opacity = "1", 50);
+            setTimeout(() => { settingsPage.classList.remove("screen-in"); }, 400);
+        }, 400);
+    });
+
+    const portalKeys = document.querySelectorAll('.portal-key');
+    const portalInstruction = document.getElementById('portal-instruction');
+    const portalForm = document.getElementById('portal-form');
+    const selectedLetterDisplay = document.getElementById('selected-letter-display');
+    const btnSaveQuestion = document.getElementById('btn-save-question');
+    const btnDeleteQuestion = document.getElementById('btn-delete-question');
+    const customQInput = document.getElementById('custom-q-input');
+    const customAInput = document.getElementById('custom-a-input');
+
+    let customQuestionsData = {};
+
+    portalKeys.forEach(key => {
+        key.addEventListener('click', function () {
+            portalKeys.forEach(k => k.classList.remove('active-key')); this.classList.add('active-key');
+            const letter = this.innerText;
+            portalInstruction.style.display = 'none'; portalForm.style.display = 'block'; selectedLetterDisplay.innerText = letter;
+            if (customQuestionsData[letter]) {
+                customQInput.value = customQuestionsData[letter].q; customAInput.value = customQuestionsData[letter].a; btnDeleteQuestion.style.display = 'block';
+            } else {
+                customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
+            }
+        });
+    });
+
+    btnSaveQuestion.addEventListener('click', () => {
+        const activeKey = document.querySelector('.portal-key.active-key');
+        if (!activeKey) return;
+        const letter = activeKey.innerText; const q = customQInput.value.trim(); const a = customAInput.value.trim();
+        if (q && a) {
+            customQuestionsData[letter] = { q, a }; activeKey.classList.add('has-data'); btnDeleteQuestion.style.display = 'block';
+            btnSaveQuestion.innerText = "تم الحفظ بنجاح ✔️"; btnSaveQuestion.style.background = "#FFD700";
+            setTimeout(() => { btnSaveQuestion.innerText = "حفظ السؤال ✔️"; btnSaveQuestion.style.background = "#00E676"; }, 1500);
+        }
+    });
+
+    btnDeleteQuestion.addEventListener('click', () => {
+        const activeKey = document.querySelector('.portal-key.active-key');
+        if (!activeKey) return;
+        const letter = activeKey.innerText;
+        delete customQuestionsData[letter]; activeKey.classList.remove('has-data');
+        customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
+        btnDeleteQuestion.innerText = "تم الحذف ✔️"; btnDeleteQuestion.style.display = 'block';
+        setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
+    });
+
+    // ==========================================
+    // 📡 نظام التنبيه الذكي للتلفزيون
+    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
@@ -306,7 +412,18 @@ document.addEventListener("DOMContentLoaded", () => {
     const tvBuzzerBox = document.getElementById('tv-buzzer-box');
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
     const tvBuzzerTitle = document.getElementById('tv-buzzer-title');
-    const hypePhrases = ["أووووه! أسرع من البرق ⚡️", "يا ساتر على السرعة! 🚀", "الذيب اللي لقطها 🐺🔥"];
+
+    const hypePhrases = [
+        "أووووه! أسرع من البرق ⚡️",
+        "يا ساتر على السرعة! 🚀",
+        "الذيب اللي لقطها 🐺🔥",
+        "عندهم العلم! 🧠✨",
+        "بومممم! ضربة معلم 💥",
+        "وحووووش الشاشة 🦍💪",
+        "ما يمزحووووون! 🔥",
+        "اللي سبق لبق 😉🏃‍♂️",
+        "يا ويلكم منهم 🚨"
+    ];
 
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/buzzer').on('value', (snapshot) => {
@@ -315,9 +432,13 @@ document.addEventListener("DOMContentLoaded", () => {
                 const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
                 let tName = data.team === 1 ? (settings.team1Name || "الفريق الأول") : (settings.team2Name || "الفريق الثاني");
                 let tColor = data.team === 1 ? (settings.team1Color || "#FF9100") : (settings.team2Color || "#10b981");
-                tvBuzzerTitle.innerText = hypePhrases[Math.floor(Math.random() * hypePhrases.length)];
+
+                const randomHype = hypePhrases[Math.floor(Math.random() * hypePhrases.length)];
+                tvBuzzerTitle.innerText = randomHype;
+
                 tvBuzzerTeamName.innerText = tName;
                 tvBuzzerBox.style.setProperty('--alert-color', tColor);
+
                 alertOverlay.classList.add('show-alert');
             } else {
                 alertOverlay.classList.remove('show-alert');
@@ -325,18 +446,29 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // تلوين اللوحة
+    // ==========================================
+    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط
+    // ==========================================
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
             const allTvHexes = document.querySelectorAll('#board-container .board-hex');
-            let team1Score = 0; let team2Score = 0;
+
+            let team1Score = 0;
+            let team2Score = 0;
 
             allTvHexes.forEach(hex => {
                 const letter = hex.querySelector('span').innerText.trim();
+
                 hex.classList.remove('team1-captured', 'team2-captured');
-                if (boardData[letter] === 'team1') { hex.classList.add('team1-captured'); team1Score++; }
-                else if (boardData[letter] === 'team2') { hex.classList.add('team2-captured'); team2Score++; }
+
+                if (boardData[letter] === 'team1') {
+                    hex.classList.add('team1-captured');
+                    team1Score++;
+                } else if (boardData[letter] === 'team2') {
+                    hex.classList.add('team2-captured');
+                    team2Score++;
+                }
             });
 
             const scoreElements = document.querySelectorAll('.score-hex span');
@@ -349,10 +481,14 @@ document.addEventListener("DOMContentLoaded", () => {
         db.ref('rooms/' + roomId + '/current_letter').on('value', (snapshot) => {
             const activeLetter = snapshot.val();
             const allTvHexes = document.querySelectorAll('#board-container .board-hex');
+
             allTvHexes.forEach(hex => {
                 const span = hex.querySelector('span');
-                if (activeLetter && span && span.innerText.trim() === activeLetter) { hex.classList.add('active-hex'); }
-                else { hex.classList.remove('active-hex'); }
+                if (activeLetter && span && span.innerText.trim() === activeLetter) {
+                    hex.classList.add('active-hex');
+                } else {
+                    hex.classList.remove('active-hex');
+                }
             });
         });
     }
