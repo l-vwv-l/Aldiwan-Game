@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🌟 السحر الجديد: توليد رقم غرفة (مع حماية التلفزيون ضد التحديث وانقطاع النت!)
+    // 🌟 السحر الجديد: توليد رقم غرفة (مع حماية ضد التحديث وانقطاع النت!)
     let roomId = sessionStorage.getItem('diwanGameRoom');
     if (!roomId) {
         roomId = Math.floor(10000 + Math.random() * 90000).toString();
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     console.log("أنت الآن في الغرفة رقم: ", roomId);
 
-    // 🧹 تصفير الجرس وإخبار السيرفر إن التلفزيون شغال وتصفير اللوحة
+    // 🧹 تصفير بيانات هذي الغرفة تحديداً وإخبار السيرفر إن التلفزيون شغال
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         db.ref('rooms/' + roomId + '/current_letter').set(null);
@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const gameUrl = "https://cheerful-crepe-bcc27f.netlify.app";
 
+    // 🔗 توليد الباركودات مدمج فيها رقم الغرفة السري!
     setTimeout(() => {
         if (document.getElementById("qr-presenter")) {
             new QRCode(document.getElementById("qr-presenter"), {
@@ -347,6 +348,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
+    // ==========================================
+    // 📡 نظام التنبيه الذكي للتلفزيون
+    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
@@ -394,6 +398,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ==========================================
+    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط 💯
+    // ==========================================
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
