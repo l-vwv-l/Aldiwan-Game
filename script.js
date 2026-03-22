@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🌟 السحر الجديد: توليد رقم غرفة (مع حماية ضد التحديث وانقطاع النت!)
+    // 🌟 السحر الجديد: توليد رقم غرفة مع حماية ضد التحديث
     let roomId = sessionStorage.getItem('diwanGameRoom');
     if (!roomId) {
         roomId = Math.floor(10000 + Math.random() * 90000).toString();
@@ -8,11 +8,10 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     console.log("أنت الآن في الغرفة رقم: ", roomId);
 
-    // 🧹 تصفير بيانات هذي الغرفة تحديداً وإخبار السيرفر إن التلفزيون شغال
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         db.ref('rooms/' + roomId + '/current_letter').set(null);
-        db.ref('rooms/' + roomId + '/board').set(null); // تصفير اللوحة
+        db.ref('rooms/' + roomId + '/board').set(null);
 
         const tvStatusRef = db.ref('rooms/' + roomId + '/tv_status');
         tvStatusRef.set('online');
@@ -21,20 +20,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const gameUrl = "https://cheerful-crepe-bcc27f.netlify.app";
 
-    // 🔗 توليد الباركودات مدمج فيها رقم الغرفة السري!
+    // 🔗 توليد 3 باركودات في غرفة الانتظار (تلقائياً تختار فئة اللاعب)
     setTimeout(() => {
-        if (document.getElementById("qr-presenter")) {
-            new QRCode(document.getElementById("qr-presenter"), {
+        if (document.getElementById("qr-presenter-lobby")) {
+            new QRCode(document.getElementById("qr-presenter-lobby"), {
                 text: gameUrl + "/presenter.html?room=" + roomId,
-                width: 180, height: 180,
-                colorDark: "#3a1c4a", colorLight: "#ffffff",
+                width: 170, height: 170, colorDark: "#3a1c4a", colorLight: "#ffffff",
             });
         }
-        if (document.getElementById("qr-player")) {
-            new QRCode(document.getElementById("qr-player"), {
-                text: gameUrl + "/player.html?room=" + roomId,
-                width: 180, height: 180,
-                colorDark: "#3a1c4a", colorLight: "#ffffff",
+        if (document.getElementById("qr-team1-lobby")) {
+            new QRCode(document.getElementById("qr-team1-lobby"), {
+                text: gameUrl + "/player.html?room=" + roomId + "&team=1", // 👈 يختار الفريق الأول تلقائي
+                width: 170, height: 170, colorDark: "#3a1c4a", colorLight: "#ffffff",
+            });
+        }
+        if (document.getElementById("qr-team2-lobby")) {
+            new QRCode(document.getElementById("qr-team2-lobby"), {
+                text: gameUrl + "/player.html?room=" + roomId + "&team=2", // 👈 يختار الفريق الثاني تلقائي
+                width: 170, height: 170, colorDark: "#3a1c4a", colorLight: "#ffffff",
             });
         }
     }, 1000);
@@ -45,11 +48,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const logoWrapper = document.getElementById("logo-wrapper");
     const lobbyControls = document.getElementById("lobby-controls");
 
-    const mobileControls = document.getElementById("mobile-controls");
     const tvControls = document.getElementById("tv-controls");
-    const btnTvRemote = document.getElementById("btn-tv-remote");
     const btnTvStart = document.getElementById("btn-tv-start");
-    const waitingMessage = document.getElementById("waiting-message");
 
     setTimeout(() => { w1.classList.add("pop-in"); }, 1500);
     setTimeout(() => { w2.classList.add("pop-in"); }, 1800);
@@ -57,57 +57,52 @@ document.addEventListener("DOMContentLoaded", () => {
 
     setTimeout(() => {
         logoWrapper.classList.add("move-up");
-        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
-        if (isMobile) {
-            mobileControls.style.display = "flex";
-            tvControls.style.display = "none";
-        } else {
-            tvControls.style.display = "flex";
-            mobileControls.style.display = "none";
-        }
+        tvControls.style.display = "flex";
         setTimeout(() => { lobbyControls.classList.add("show-controls"); }, 500);
     }, 3500);
 
-    btnTvRemote.addEventListener("click", () => {
-        lobbyControls.classList.remove("show-controls");
-        logoWrapper.classList.remove("move-up");
-        setTimeout(() => {
-            lobbyControls.style.display = "none";
-            waitingMessage.classList.add("show-message");
-            logoWrapper.classList.add("floating-logo");
-        }, 800);
+    // 🚥 عند ضغط "ابدأ" -> نقل إلى شاشة غرفة الانتظار المليئة بالباركودات
+    btnTvStart.addEventListener("click", () => {
+
+        // تحديث الألوان والأسماء في الغرفة حسب الإعدادات
+        const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
+        const t1Name = settings.team1Name || "الفريق الأول";
+        const t2Name = settings.team2Name || "الفريق الثاني";
+        const c1 = settings.team1Color || "#FF9100";
+        const c2 = settings.team2Color || "#10b981";
+
+        const lblT1 = document.getElementById('lobby-t1-name');
+        const lblT2 = document.getElementById('lobby-t2-name');
+        const boxT1 = document.getElementById('box-team1');
+        const boxT2 = document.getElementById('box-team2');
+
+        if (lblT1) { lblT1.innerText = t1Name; lblT1.style.color = c1; boxT1.style.borderColor = c1; boxT1.style.boxShadow = `0 0 20px ${c1}40`; }
+        if (lblT2) { lblT2.innerText = t2Name; lblT2.style.color = c2; boxT2.style.borderColor = c2; boxT2.style.boxShadow = `0 0 20px ${c2}40`; }
+
+        document.getElementById('lobby-room-id').innerText = "غرفة رقم: " + roomId;
+
+        document.getElementById("welcome-screen").style.display = "none";
+        document.getElementById("lobby-screen").style.display = "flex"; // إظهار غرفة الباركودات
     });
 
-    btnTvStart.addEventListener("click", () => {
-        if (lobbyControls) {
-            lobbyControls.style.opacity = "0";
-            setTimeout(() => lobbyControls.style.display = "none", 500);
-        }
-        if (waitingMessage) {
-            waitingMessage.style.opacity = "0";
-            setTimeout(() => waitingMessage.classList.remove("show-message"), 500);
-        }
+    // 🚀 عند ضغط زر "الكل جاهز! العب" من داخل غرفة الانتظار
+    document.getElementById("btn-start-from-lobby").addEventListener("click", () => {
 
-        logoWrapper.classList.remove("move-up");
-        logoWrapper.classList.remove("floating-logo");
+        document.getElementById("lobby-screen").style.display = "none"; // إخفاء الباركودات
 
         if (typeof db !== 'undefined') {
             db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         }
 
-        setTimeout(() => { w3.classList.remove("pop-in"); }, 100);
-        setTimeout(() => { w2.classList.remove("pop-in"); }, 300);
-        setTimeout(() => { w1.classList.remove("pop-in"); }, 500);
-
+        // بدء مشهد انتقال اللوحة السداسية للعبة الحقيقية
         const glassHexes = Array.from(document.querySelectorAll('#glass-layer .glass-hex')).reverse();
         glassHexes.forEach((hex, index) => {
-            setTimeout(() => { hex.style.animation = "fadeOutHexReverse 0.5s ease forwards"; }, 600 + (index * 40));
+            setTimeout(() => { hex.style.animation = "fadeOutHexReverse 0.5s ease forwards"; }, index * 40);
         });
 
-        const waitTime = 600 + (glassHexes.length * 40) + 500;
+        const waitTime = (glassHexes.length * 40) + 500;
 
         setTimeout(() => {
-            document.getElementById("welcome-screen").style.display = "none";
             document.getElementById("glass-layer").style.display = "none";
 
             const transScreen = document.getElementById("transition-screen");
@@ -221,6 +216,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const gameSettingsData = { compName: customWord, team1Name: team1Name, team2Name: team2Name, team1Color: color1, team2Color: color2 };
             localStorage.setItem('diwanGameSettings', JSON.stringify(gameSettingsData));
+
+            // رفع الإعدادات للسيرفر عشان الجوالات تقرأها بعدين! 🚀
+            if (typeof db !== 'undefined') {
+                db.ref('rooms/' + roomId + '/settings').set(gameSettingsData);
+            }
 
             settingsForm.classList.remove("fade-in-up"); settingsSaveBtn.classList.remove("fade-in-up");
             settingsForm.classList.add("fade-out-down"); settingsSaveBtn.classList.add("fade-out-down");
@@ -399,7 +399,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     // ==========================================
-    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط 💯
+    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط
     // ==========================================
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {

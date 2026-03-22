@@ -1,18 +1,16 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🌟 استخراج رقم الغرفة السري من الرابط
+    // 🌟 استخراج رقم الغرفة ورقم الفريق من الرابط
     const urlParams = new URLSearchParams(window.location.search);
     const roomId = urlParams.get('room') || 'test_room';
+    const urlTeam = urlParams.get('team'); // بيطلع 1 أو 2
 
     // ربط العناصر
     const selectionOverlay = document.getElementById('pl-team-selection');
     const buzzerScreen = document.getElementById('pl-buzzer-screen');
-
     const btnChooseT1 = document.getElementById('btn-choose-t1');
     const btnChooseT2 = document.getElementById('btn-choose-t2');
-
     const teamNameDisplay = document.getElementById('pl-team-name');
-
     const buzzerWrapper = document.getElementById('pl-buzzer-btn');
     const buzzerBtn = document.getElementById('pl-buzzer-inner-btn');
     const statusDisplay = document.getElementById('pl-status');
@@ -20,17 +18,26 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let myTeam = null;
 
-    // 1. نظام اختيار الفريق
-    if (btnChooseT1 && btnChooseT2) {
-        btnChooseT1.addEventListener('click', () => {
-            myTeam = 1;
-            setupPlayer("الفريق الأول", "#FF9100");
-        });
+    // جلب ألوان وأسماء الفرق (عشان نعطيها للمتسابق تلقائياً)
+    const savedSettings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
+    const t1Name = savedSettings.team1Name || "الفريق الأول";
+    const t2Name = savedSettings.team2Name || "الفريق الثاني";
+    const t1Color = savedSettings.team1Color || "#FF9100";
+    const t2Color = savedSettings.team2Color || "#10b981";
 
-        btnChooseT2.addEventListener('click', () => {
-            myTeam = 2;
-            setupPlayer("الفريق الثاني", "#10b981");
-        });
+    // 🚀 السحر: تخطي شاشة الاختيار إذا مسح باركود فريقه!
+    if (urlTeam === '1') {
+        myTeam = 1;
+        setupPlayer(t1Name, t1Color);
+    } else if (urlTeam === '2') {
+        myTeam = 2;
+        setupPlayer(t2Name, t2Color);
+    } else {
+        // في حال دخل الرابط العادي يدوي بدون باركود (احتياط)
+        if (btnChooseT1 && btnChooseT2) {
+            btnChooseT1.addEventListener('click', () => { myTeam = 1; setupPlayer(t1Name, t1Color); });
+            btnChooseT2.addEventListener('click', () => { myTeam = 2; setupPlayer(t2Name, t2Color); });
+        }
     }
 
     function setupPlayer(teamName, teamColor) {
@@ -41,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.style.setProperty('--pl-active-color', teamColor);
     }
 
-    // 2. 📡 السحر: الاستماع للسيرفر حسب الغرفة
+    // 2. 📡 الاستماع للسيرفر
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/buzzer').on('value', (snapshot) => {
             const data = snapshot.val();
@@ -71,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // 3. 🚀 إرسال الضغطة لغرفتي في السيرفر
+        // 3. إرسال الضغطة للسيرفر
         if (buzzerBtn) {
             buzzerBtn.addEventListener('click', () => {
                 if (buzzerWrapper && buzzerWrapper.classList.contains('pl-buzzer-locked')) return;
@@ -87,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // 💯 نظام مزامنة النقاط
+        // 💯 مزامنة النقاط
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
             let myScore = 0;
