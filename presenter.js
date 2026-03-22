@@ -151,4 +151,9 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // 🙋‍♂️ إرسال إشارة الدخول للمقدم للتلفزيون
+    const presenceRef = db.ref('rooms/' + roomId + '/presence/presenter');
+    presenceRef.set('online');
+    presenceRef.onDisconnect().set('offline');
+
 });

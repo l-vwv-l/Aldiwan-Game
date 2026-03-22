@@ -78,22 +78,61 @@
         <div style="display: flex; gap: 50px; justify-content: center; margin-bottom: 50px; flex-wrap: wrap;">
 
             <div id="box-team2"
-                style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 3px solid #10b981; text-align: center; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3);">
+                style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 3px solid #10b981; text-align: center; box-shadow: 0 0 20px rgba(16, 185, 129, 0.3); width: 260px;">
                 <h3 id="lobby-t2-name" style="color: #10b981; margin-bottom: 20px; font-size: 1.8rem;">الفريق الثاني
                 </h3>
-                <div id="qr-team2-lobby" style="background: white; padding: 15px; border-radius: 15px;"></div>
+                <div id="qr-team2-lobby-container">
+                    <div id="qr-team2-lobby"
+                        style="background: white; padding: 15px; border-radius: 15px; display: inline-block;"></div>
+                    <a id="url-team2-lobby" href="#" target="_blank"
+                        style="display: block; margin-top: 15px; color: #a7f3d0; font-size: 1rem; text-decoration: none; word-break: break-all; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 8px;">الرابط
+                        هنا</a>
+                </div>
+                <div id="status-team2-lobby" style="display: none; margin-top: 20px;">
+                    <div style="font-size: 2rem; color: #10b981; font-weight: bold; margin-bottom: 15px;">تم الدخول ✅
+                    </div>
+                    <button id="btn-reset-team2" class="uiverse-btn"
+                        style="padding: 5px 15px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2);"><span
+                            class="btn-content">إظهار الباركود 🔄</span></button>
+                </div>
             </div>
 
             <div id="box-presenter"
-                style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 3px solid #8b5cf6; text-align: center; box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); transform: scale(1.1); margin: 0 20px;">
+                style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 3px solid #8b5cf6; text-align: center; box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); transform: scale(1.1); margin: 0 20px; width: 280px;">
                 <h3 style="color: #8b5cf6; margin-bottom: 20px; font-size: 1.8rem;">🎙️ المـــقـــدم</h3>
-                <div id="qr-presenter-lobby" style="background: white; padding: 15px; border-radius: 15px;"></div>
+                <div id="qr-presenter-lobby-container">
+                    <div id="qr-presenter-lobby"
+                        style="background: white; padding: 15px; border-radius: 15px; display: inline-block;"></div>
+                    <a id="url-presenter-lobby" href="#" target="_blank"
+                        style="display: block; margin-top: 15px; color: #ddd6fe; font-size: 1rem; text-decoration: none; word-break: break-all; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 8px;">الرابط
+                        هنا</a>
+                </div>
+                <div id="status-presenter-lobby" style="display: none; margin-top: 20px;">
+                    <div style="font-size: 2.2rem; color: #8b5cf6; font-weight: bold; margin-bottom: 15px;">تم الدخول ✅
+                    </div>
+                    <button id="btn-reset-presenter" class="uiverse-btn"
+                        style="padding: 5px 15px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2);"><span
+                            class="btn-content">إظهار الباركود 🔄</span></button>
+                </div>
             </div>
 
             <div id="box-team1"
-                style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 3px solid #FF9100; text-align: center; box-shadow: 0 0 20px rgba(255, 145, 0, 0.3);">
+                style="background: rgba(255,255,255,0.05); padding: 25px; border-radius: 20px; border: 3px solid #FF9100; text-align: center; box-shadow: 0 0 20px rgba(255, 145, 0, 0.3); width: 260px;">
                 <h3 id="lobby-t1-name" style="color: #FF9100; margin-bottom: 20px; font-size: 1.8rem;">الفريق الأول</h3>
-                <div id="qr-team1-lobby" style="background: white; padding: 15px; border-radius: 15px;"></div>
+                <div id="qr-team1-lobby-container">
+                    <div id="qr-team1-lobby"
+                        style="background: white; padding: 15px; border-radius: 15px; display: inline-block;"></div>
+                    <a id="url-team1-lobby" href="#" target="_blank"
+                        style="display: block; margin-top: 15px; color: #fde68a; font-size: 1rem; text-decoration: none; word-break: break-all; background: rgba(0,0,0,0.3); padding: 5px; border-radius: 8px;">الرابط
+                        هنا</a>
+                </div>
+                <div id="status-team1-lobby" style="display: none; margin-top: 20px;">
+                    <div style="font-size: 2rem; color: #FF9100; font-weight: bold; margin-bottom: 15px;">تم الدخول ✅
+                    </div>
+                    <button id="btn-reset-team1" class="uiverse-btn"
+                        style="padding: 5px 15px; font-size: 1rem; border: 1px solid rgba(255,255,255,0.2);"><span
+                            class="btn-content">إظهار الباركود 🔄</span></button>
+                </div>
             </div>
 
         </div>
@@ -133,17 +172,16 @@
                     <label class="setting-label">لون الفريق الأول:</label>
                     <div class="setting-control">
                         <div class="container-items team1-colors">
-                            <button class="item-color selected-color" style="--color: #FF9100"
-                                aria-color="برتقالي"></button>
-                            <button class="item-color" style="--color: #e11d48" aria-color="أحمر"></button>
-                            <button class="item-color" style="--color: #ec4899" aria-color="وردي"></button>
-                            <button class="item-color" style="--color: #facc15" aria-color="أصفر"></button>
-                            <button class="item-color" style="--color: #84cc16" aria-color="ليموني"></button>
-                            <button class="item-color" style="--color: #10b981" aria-color="أخضر"></button>
-                            <button class="item-color" style="--color: #06b6d4" aria-color="سماوي"></button>
-                            <button class="item-color" style="--color: #3b82f6" aria-color="أزرق"></button>
-                            <button class="item-color" style="--color: #6366f1" aria-color="نيلي"></button>
-                            <button class="item-color" style="--color: #8b5cf6" aria-color="بنفسجي"></button>
+                            <button class="item-color selected-color" style="--color: #FF9100"></button>
+                            <button class="item-color" style="--color: #e11d48"></button>
+                            <button class="item-color" style="--color: #ec4899"></button>
+                            <button class="item-color" style="--color: #facc15"></button>
+                            <button class="item-color" style="--color: #84cc16"></button>
+                            <button class="item-color" style="--color: #10b981"></button>
+                            <button class="item-color" style="--color: #06b6d4"></button>
+                            <button class="item-color" style="--color: #3b82f6"></button>
+                            <button class="item-color" style="--color: #6366f1"></button>
+                            <button class="item-color" style="--color: #8b5cf6"></button>
                         </div>
                     </div>
                 </div>
@@ -159,17 +197,16 @@
                     <label class="setting-label">لون الفريق الثاني:</label>
                     <div class="setting-control">
                         <div class="container-items team2-colors">
-                            <button class="item-color" style="--color: #FF9100" aria-color="برتقالي"></button>
-                            <button class="item-color" style="--color: #e11d48" aria-color="أحمر"></button>
-                            <button class="item-color" style="--color: #ec4899" aria-color="وردي"></button>
-                            <button class="item-color" style="--color: #facc15" aria-color="أصفر"></button>
-                            <button class="item-color" style="--color: #84cc16" aria-color="ليموني"></button>
-                            <button class="item-color selected-color" style="--color: #10b981"
-                                aria-color="أخضر"></button>
-                            <button class="item-color" style="--color: #06b6d4" aria-color="سماوي"></button>
-                            <button class="item-color" style="--color: #3b82f6" aria-color="أزرق"></button>
-                            <button class="item-color" style="--color: #6366f1" aria-color="نيلي"></button>
-                            <button class="item-color" style="--color: #8b5cf6" aria-color="بنفسجي"></button>
+                            <button class="item-color" style="--color: #FF9100"></button>
+                            <button class="item-color" style="--color: #e11d48"></button>
+                            <button class="item-color" style="--color: #ec4899"></button>
+                            <button class="item-color" style="--color: #facc15"></button>
+                            <button class="item-color" style="--color: #84cc16"></button>
+                            <button class="item-color selected-color" style="--color: #10b981"></button>
+                            <button class="item-color" style="--color: #06b6d4"></button>
+                            <button class="item-color" style="--color: #3b82f6"></button>
+                            <button class="item-color" style="--color: #6366f1"></button>
+                            <button class="item-color" style="--color: #8b5cf6"></button>
                         </div>
                     </div>
                 </div>
@@ -199,44 +236,16 @@
                             <option value="all">عشوائي (كل المجالات)</option>
                             <option value="history">تاريخ</option>
                             <option value="sports">رياضة</option>
-                            <option value="science">علوم</option>
-                            <option value="language">لغة ومعاني</option>
-                            <option value="geo">جغرافيا</option>
-                            <option value="proverbs">أمثال وحكم</option>
-                            <option value="social">مصطلحات اجتماعية</option>
-                            <option value="nature">نباتات وحيوانات</option>
-                            <option value="culture">ثقافة عامة</option>
                         </select>
-                    </div>
-                </div>
-
-                <div class="setting-row">
-                    <label class="setting-label">عدد جولات الفوز:</label>
-                    <div class="setting-control">
-                        <div class="sp-segmented">
-                            <button class="sp-seg-btn active">جولة</button>
-                            <button class="sp-seg-btn">جولتين</button>
-                            <button class="sp-seg-btn">ثلاث جولات</button>
-                        </div>
                     </div>
                 </div>
 
                 <div class="setting-row">
                     <label class="setting-label">نوع المقدم:</label>
                     <div class="setting-control">
-                        <div class="sp-segmented">
-                            <button class="sp-seg-btn active">مقدم بشري</button>
-                            <button class="sp-seg-btn">مقدم آلي</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="setting-row">
-                    <label class="setting-label">الصوت:</label>
-                    <div class="setting-control">
-                        <div class="sp-segmented">
-                            <button class="sp-seg-btn">إيقاف</button>
-                            <button class="sp-seg-btn active">تشغيل</button>
+                        <div class="sp-segmented" id="setting-presenter-type">
+                            <button class="sp-seg-btn active" data-type="human">مقدم بشري</button>
+                            <button class="sp-seg-btn" data-type="ai">مقدم آلي</button>
                         </div>
                     </div>
                 </div>
@@ -250,66 +259,6 @@
                 </button>
             </div>
 
-        </div>
-    </div>
-
-    <div id="questions-portal-screen" class="hidden-screen" style="opacity: 0;">
-        <div class="portal-content">
-            <button id="btn-back-from-portal" class="portal-back-btn">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <line x1="19" y1="12" x2="5" y2="12"></line>
-                    <polyline points="12 19 5 12 12 5"></polyline>
-                </svg>
-            </button>
-
-            <div class="settings-logo" style="margin-bottom: 0;">
-                <div class="logo-base" style="transform: scale(0.35); transform-origin: top center;">
-                    <div class="word word-hurouf pop-in" id="pw1">حروف</div>
-                    <div class="word word-maa pop-in" id="pw2">مـــــع</div>
-                    <div class="word word-diwan pop-in" id="pw3">الديوان</div>
-                </div>
-            </div>
-
-            <h1 class="portal-title" style="margin-top: -30px;">بوابة الأسئلة</h1>
-
-            <div class="portal-input-area">
-                <p id="portal-instruction">اختر حرفاً من الأسفل لعرض/إضافة الأسئلة 👆</p>
-
-                <div id="portal-form" style="display: none; width: 100%;">
-                    <h2 id="selected-letter-display" class="portal-letter-badge">أ</h2>
-                    <input type="text" id="custom-q-input" class="portal-input" placeholder="اكتب السؤال هنا...">
-                    <input type="text" id="custom-a-input" class="portal-input" placeholder="اكتب الإجابة هنا...">
-
-                    <div style="display: flex; gap: 10px; width: 100%;">
-                        <button id="btn-save-question" class="portal-save-btn">حفظ السؤال ✔️</button>
-                        <button id="btn-delete-question" class="portal-delete-btn" style="display: none;">حذف
-                            🗑️</button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="portal-keyboard">
-                <button class="portal-key">أ</button><button class="portal-key">ب</button><button
-                    class="portal-key">ت</button>
-                <button class="portal-key">ث</button><button class="portal-key">ج</button><button
-                    class="portal-key">ح</button>
-                <button class="portal-key">خ</button><button class="portal-key">د</button><button
-                    class="portal-key">ذ</button>
-                <button class="portal-key">ر</button><button class="portal-key">ز</button><button
-                    class="portal-key">س</button>
-                <button class="portal-key">ش</button><button class="portal-key">ص</button><button
-                    class="portal-key">ض</button>
-                <button class="portal-key">ط</button><button class="portal-key">ظ</button><button
-                    class="portal-key">ع</button>
-                <button class="portal-key">غ</button><button class="portal-key">ف</button><button
-                    class="portal-key">ق</button>
-                <button class="portal-key">ك</button><button class="portal-key">ل</button><button
-                    class="portal-key">م</button>
-                <button class="portal-key">ن</button><button class="portal-key">هـ</button><button
-                    class="portal-key">و</button>
-                <button class="portal-key">ي</button>
-            </div>
         </div>
     </div>
 
@@ -339,23 +288,6 @@
                     <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4" />
                     <polyline points="8 17 3 12 8 7" />
                     <line x1="3" y1="12" x2="15" y2="12" />
-                </svg>
-            </div>
-            <div class="button extra-btn" title="زر إضافي">
-                <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M773.907692 992.768h-590.76923c-48.864492 0-88.615385-39.754831-88.615385-88.615385V120.032492c0-48.852677 39.743015-88.615385 88.599631-88.631138l379.076923-0.169354h0.047261c35.233477 0 78.217846 18.699815 102.230646 44.480985l158.0032 169.621661C845.686154 270.245415 862.523077 313.040738 862.523077 347.096615v300.780308c0 27.1872-22.043569 49.230769-49.230769 49.230769s-49.230769-22.043569-49.23077-49.230769V347.096615c0-9.168738-7.388554-27.951262-13.627076-34.650584l-158.011077-169.6256c-5.490215-5.891938-22.122338-13.126892-30.176493-13.126893h-0.003938L192.984615 129.858954V894.306462h571.076923V805.415385c0-27.1872 22.043569-49.230769 49.23077-49.23077s49.230769 22.043569 49.230769 49.23077v98.73723c0 48.864492-39.754831 88.615385-88.615385 88.615385z"
-                        fill="#ffffff"></path>
-                    <path
-                        d="M414.802708 753.829415a49.092923 49.092923 0 0 1-34.812062-14.418707l-90.289231-90.285293c-19.223631-19.223631-19.227569-50.396554 0-69.624123 19.223631-19.223631 50.396554-19.223631 69.624123 0l55.47717 55.473231 187.7504-187.746461c19.227569-19.223631 50.396554-19.219692 69.624123 0 19.227569 19.227569 19.227569 50.396554 0 69.624123l-222.562462 222.558523a49.073231 49.073231 0 0 1-34.812061 14.418707z"
-                        fill="#ffffff"></path>
-                </svg>
-            </div>
-            <div class="button main-btn" id="btn-toggle-menu" title="القائمة">
-                <svg class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg">
-                    <path
-                        d="M793.6 678.4c29.866667-51.2 81.066667-76.8 132.266667-72.533333 8.533333-29.866667 12.8-64 12.8-98.133334 0-29.866667-4.266667-59.733333-8.533334-85.333333-51.2 8.533333-106.666667-21.333333-136.533333-72.533333-29.866667-51.2-25.6-115.2 8.533333-153.6-46.933333-42.666667-98.133333-72.533333-157.866666-93.866667-17.066667 51.2-68.266667 85.333333-132.266667 85.333333s-110.933333-34.133333-132.266667-85.333333c-59.733333 21.333333-110.933333 55.466667-157.866666 98.133333 34.133333 42.666667 38.4 102.4 8.533333 153.6-29.866667 51.2-85.333333 76.8-136.533333 68.266667-4.266667 29.866667-8.533333 59.733333-8.533334 89.6 0 34.133333 4.266667 64 12.8 93.866667 51.2-4.266667 102.4 21.333333 132.266667 72.533333 25.6 51.2 25.6 106.666667-4.266667 149.333333 46.933333 42.666667 98.133333 72.533333 157.866667 89.6 21.333333-46.933333 68.266667-76.8 128-76.8s106.666667 29.866667 128 76.8c59.733333-17.066667 110.933333-51.2 157.866667-89.6-29.866667-42.666667-34.133333-98.133333-4.266667-149.333333z m-281.6 17.066667c-102.4 0-183.466667-81.066667-183.466667-183.466667S409.6 328.533333 512 328.533333s183.466667 81.066667 183.466667 183.466667-81.066667 183.466667-183.466667 183.466667z"
-                        fill="#ffffff"></path>
                 </svg>
             </div>
         </div>

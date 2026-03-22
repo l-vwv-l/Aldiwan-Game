@@ -111,4 +111,10 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
     }
+
+    // 🙋‍♂️ إرسال إشارة الدخول للتلفزيون
+    let myRoleName = myTeam === 1 ? 'team1' : 'team2';
+    const presenceRef = db.ref('rooms/' + roomId + '/presence/' + myRoleName);
+    presenceRef.set('online');
+    presenceRef.onDisconnect().set('offline');
 });
