@@ -338,11 +338,14 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
+    // ==========================================
+    // 📡 نظام التنبيه الذكي للتلفزيون (بالعبارات الحماسية)
+    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
         <div class="buzzer-alert-box" id="tv-buzzer-box">
-            <div class="buzzer-alert-title">🔔 تم الضغط بواسطة 🔔</div>
+            <div class="buzzer-alert-title" id="tv-buzzer-title">🔔 تم الضغط 🔔</div>
             <div class="buzzer-alert-team" id="tv-buzzer-team-name">الفريق</div>
         </div>
     `;
@@ -350,6 +353,20 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const tvBuzzerBox = document.getElementById('tv-buzzer-box');
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
+    const tvBuzzerTitle = document.getElementById('tv-buzzer-title');
+
+    // 🤩 عبارات حماسية وفلاوية تتغير كل مرة يضغطون فيها الجرس!
+    const hypePhrases = [
+        "أووووه! أسرع من البرق ⚡️",
+        "يا ساتر على السرعة! 🚀",
+        "الذيب اللي لقطها 🐺🔥",
+        "عندهم العلم! 🧠✨",
+        "بومممم! ضربة معلم 💥",
+        "وحووووش الشاشة 🦍💪",
+        "ما يمزحووووون! 🔥",
+        "اللي سبق لبق 😉🏃‍♂️",
+        "يا ويلكم منهم 🚨"
+    ];
 
     if (typeof db !== 'undefined') {
         db.ref('game/buzzer').on('value', (snapshot) => {
@@ -358,6 +375,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
                 let tName = data.team === 1 ? (settings.team1Name || "الفريق الأول") : (settings.team2Name || "الفريق الثاني");
                 let tColor = data.team === 1 ? (settings.team1Color || "#FF9100") : (settings.team2Color || "#10b981");
+
+                // سحب جملة عشوائية
+                const randomHype = hypePhrases[Math.floor(Math.random() * hypePhrases.length)];
+                tvBuzzerTitle.innerText = randomHype;
 
                 tvBuzzerTeamName.innerText = tName;
                 tvBuzzerBox.style.setProperty('--alert-color', tColor);
@@ -419,4 +440,4 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         });
     }
-}); // 👈 هذي قفلة الملف الأساسية
+});
