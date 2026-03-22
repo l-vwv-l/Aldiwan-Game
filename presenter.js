@@ -1,10 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🌟 استخراج رقم الغرفة السري من الرابط
     const urlParams = new URLSearchParams(window.location.search);
-    const roomId = urlParams.get('room') || 'test_room'; // لو فتحت الرابط بدون باركود بيدخلك غرفة اختبار
+    const roomId = urlParams.get('room') || 'test_room';
 
-    // 📡 فحص اتصال التلفزيون الحقيقي
     const statusBadge = document.querySelector('.pr-floating-status');
     if (statusBadge && typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/tv_status').on('value', (snapshot) => {
@@ -34,28 +32,31 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnTeam2 = document.querySelector('.pr-btn-team2');
     const presenterCompName = document.getElementById('pr-comp-name');
 
-    function updatePresenterSettings() {
-        const savedSettings = localStorage.getItem('diwanGameSettings');
-        let settings = {
-            compName: "الديوان", team1Name: "الفريق الأول", team2Name: "الفريق الثاني",
-            team1Color: "#FF9100", team2Color: "#10b981"
-        };
-        if (savedSettings) settings = JSON.parse(savedSettings);
-
-        if (presenterCompName) presenterCompName.innerText = settings.compName;
+    // 🎨 السحر: تحديث الألوان والأسماء من السيرفر مباشرة عشان تتوافق مع إعدادات التلفزيون
+    function updatePresenterSettings(settings) {
+        if (presenterCompName) presenterCompName.innerText = settings.compName || "الديوان";
         if (btnTeam1) {
-            btnTeam1.innerHTML = `صح لـ <span style="font-size:1.4rem;">(${settings.team1Name})</span> ✔️`;
-            btnTeam1.style.backgroundColor = settings.team1Color;
+            btnTeam1.innerHTML = `صح لـ <span style="font-size:1.4rem;">(${settings.team1Name || "الفريق الأول"})</span> ✔️`;
+            btnTeam1.style.backgroundColor = settings.team1Color || "#FF9100";
         }
         if (btnTeam2) {
-            btnTeam2.innerHTML = `صح لـ <span style="font-size:1.4rem;">(${settings.team2Name})</span> ✔️`;
-            btnTeam2.style.backgroundColor = settings.team2Color;
+            btnTeam2.innerHTML = `صح لـ <span style="font-size:1.4rem;">(${settings.team2Name || "الفريق الثاني"})</span> ✔️`;
+            btnTeam2.style.backgroundColor = settings.team2Color || "#10b981";
         }
     }
 
-    updatePresenterSettings();
+    if (typeof db !== 'undefined') {
+        db.ref('rooms/' + roomId + '/settings').on('value', (snapshot) => {
+            if (snapshot.val()) {
+                updatePresenterSettings(snapshot.val());
+            } else {
+                // إذا ماله إعدادات في السيرفر يجيب من الذاكرة الاحتياطية
+                const saved = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
+                updatePresenterSettings(saved);
+            }
+        });
+    }
 
-    // 🎨 تلوين لوحة المقدم بالتزامن مع التلفزيون
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
@@ -152,8 +153,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // 🙋‍♂️ إرسال إشارة الدخول للمقدم للتلفزيون
-    const presenceRef = db.ref('rooms/' + roomId + '/presence/presenter');
-    presenceRef.set('online');
-    presenceRef.onDisconnect().set('offline');
+    if (typeof db !== 'undefined') {
+        const presenceRef = db.ref('rooms/' + roomId + '/presence/presenter');
+        presenceRef.set('online');
+        presenceRef.onDisconnect().set('offline');
+    }
 
 });

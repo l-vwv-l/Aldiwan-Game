@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🌟 السحر الجديد: توليد رقم غرفة مع حماية ضد التحديث
     let roomId = sessionStorage.getItem('diwanGameRoom');
     if (!roomId) {
         roomId = Math.floor(10000 + Math.random() * 90000).toString();
@@ -12,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         db.ref('rooms/' + roomId + '/current_letter').set(null);
         db.ref('rooms/' + roomId + '/board').set(null);
-        db.ref('rooms/' + roomId + '/presence').set(null); // تصفير الحضور عشان نراقب اللي يدخل
+        db.ref('rooms/' + roomId + '/presence').set(null);
 
         const tvStatusRef = db.ref('rooms/' + roomId + '/tv_status');
         tvStatusRef.set('online');
@@ -21,7 +20,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const gameUrl = "https://cheerful-crepe-bcc27f.netlify.app";
 
-    // 🔗 توليد 3 باركودات مع روابط نصية تحتها
     setTimeout(() => {
         const pUrl = gameUrl + "/presenter.html?room=" + roomId;
         const t1Url = gameUrl + "/player.html?room=" + roomId + "&team=1";
@@ -63,10 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { lobbyControls.classList.add("show-controls"); }, 500);
     }, 3500);
 
-    // 🚥 عند ضغط "ابدأ" -> نقل إلى شاشة غرفة الانتظار المليئة بالباركودات
     btnTvStart.addEventListener("click", () => {
-
-        // تحديث الألوان والأسماء في الغرفة حسب الإعدادات
         const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
         const t1Name = settings.team1Name || "الفريق الأول";
         const t2Name = settings.team2Name || "الفريق الثاني";
@@ -84,19 +79,17 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById('lobby-room-id').innerText = "غرفة رقم: " + roomId;
 
         document.getElementById("welcome-screen").style.display = "none";
-        document.getElementById("lobby-screen").style.display = "flex"; // إظهار غرفة الباركودات
+        document.getElementById("lobby-screen").style.display = "flex";
     });
 
-    // 🚀 عند ضغط زر "الكل جاهز! العب" من داخل غرفة الانتظار
     document.getElementById("btn-start-from-lobby").addEventListener("click", () => {
 
-        document.getElementById("lobby-screen").style.display = "none"; // إخفاء الباركودات
+        document.getElementById("lobby-screen").style.display = "none";
 
         if (typeof db !== 'undefined') {
             db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         }
 
-        // بدء مشهد انتقال اللوحة السداسية للعبة الحقيقية
         const glassHexes = Array.from(document.querySelectorAll('#glass-layer .glass-hex')).reverse();
         glassHexes.forEach((hex, index) => {
             setTimeout(() => { hex.style.animation = "fadeOutHexReverse 0.5s ease forwards"; }, index * 40);
@@ -186,12 +179,11 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnSaveSettings) {
         btnSaveSettings.addEventListener("click", () => {
 
-            // 🚨 منع خيار المقدم الآلي مؤقتاً
             const aiBtn = document.querySelector('#setting-presenter-type .sp-seg-btn[data-type="ai"]');
             if (aiBtn && aiBtn.classList.contains('active')) {
                 alert("المقدم الآلي تحت التطوير حالياً ⏳ سيتم تفعيل المقدم البشري مؤقتاً.");
                 const humanBtn = document.querySelector('#setting-presenter-type .sp-seg-btn[data-type="human"]');
-                if (humanBtn) humanBtn.click(); // يرجعه تلقائي للمقدم البشري
+                if (humanBtn) humanBtn.click();
             }
 
             const team1Input = document.getElementById("setting-team1");
@@ -201,8 +193,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const teamNamesInGame = document.querySelectorAll(".team-name-box");
             if (teamNamesInGame.length >= 2) {
-                teamNamesInGame[0].innerText = team1Name; // يمين
-                teamNamesInGame[1].innerText = team2Name; // يسار
+                teamNamesInGame[0].innerText = team1Name;
+                teamNamesInGame[1].innerText = team2Name;
             }
 
             const compInput = document.getElementById("setting-comp-name");
@@ -228,7 +220,6 @@ document.addEventListener("DOMContentLoaded", () => {
             const gameSettingsData = { compName: customWord, team1Name: team1Name, team2Name: team2Name, team1Color: color1, team2Color: color2 };
             localStorage.setItem('diwanGameSettings', JSON.stringify(gameSettingsData));
 
-            // رفع الإعدادات للسيرفر عشان الجوالات تقرأها بعدين! 🚀
             if (typeof db !== 'undefined') {
                 db.ref('rooms/' + roomId + '/settings').set(gameSettingsData);
             }
@@ -268,14 +259,10 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // ==========================================
-    // 🕵️‍♂️ نظام (تم الدخول) المباشر في غرفة الانتظار
-    // ==========================================
     if (typeof db !== 'undefined') {
         const roles = ['presenter', 'team1', 'team2'];
 
         roles.forEach(role => {
-            // الاستماع لحالة الدخول
             db.ref('rooms/' + roomId + '/presence/' + role).on('value', (snap) => {
                 const status = snap.val();
                 const qrContainer = document.getElementById('qr-' + role + '-lobby-container');
@@ -292,13 +279,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // برمجة زر (إظهار الباركود 🔄)
             const resetBtn = document.getElementById('btn-reset-' + role);
             if (resetBtn) {
                 resetBtn.addEventListener('click', () => {
-                    document.getElementById('qr-' + role + '-lobby-container').style.display = 'block';
-                    document.getElementById('status-' + role + '-lobby').style.display = 'none';
-                    // نمسح الحالة من السيرفر عشان ما يرجع (تم الدخول) على طول
                     db.ref('rooms/' + roomId + '/presence/' + role).set(null);
                 });
             }
@@ -396,9 +379,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
-    // ==========================================
-    // 📡 نظام التنبيه الذكي للتلفزيون
-    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
@@ -413,17 +393,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
     const tvBuzzerTitle = document.getElementById('tv-buzzer-title');
 
-    const hypePhrases = [
-        "أووووه! أسرع من البرق ⚡️",
-        "يا ساتر على السرعة! 🚀",
-        "الذيب اللي لقطها 🐺🔥",
-        "عندهم العلم! 🧠✨",
-        "بومممم! ضربة معلم 💥",
-        "وحووووش الشاشة 🦍💪",
-        "ما يمزحووووون! 🔥",
-        "اللي سبق لبق 😉🏃‍♂️",
-        "يا ويلكم منهم 🚨"
-    ];
+    const hypePhrases = ["أووووه! أسرع من البرق ⚡️", "يا ساتر على السرعة! 🚀", "الذيب اللي لقطها 🐺🔥", "عندهم العلم! 🧠✨", "بومممم! ضربة معلم 💥", "وحووووش الشاشة 🦍💪", "ما يمزحووووون! 🔥", "اللي سبق لبق 😉🏃‍♂️", "يا ويلكم منهم 🚨"];
 
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/buzzer').on('value', (snapshot) => {
@@ -446,9 +416,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ==========================================
-    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط
-    // ==========================================
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
