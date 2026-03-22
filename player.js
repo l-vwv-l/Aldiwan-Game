@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ربط العناصر بالأسماء الصحيحة في ملفك
+    // ربط العناصر بالأسماء الصحيحة في ملف HTML حقك
     const selectionOverlay = document.getElementById('pl-team-selection');
     const buzzerScreen = document.getElementById('pl-buzzer-screen');
 
@@ -9,9 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const teamNameDisplay = document.getElementById('pl-team-name');
 
+    // الأزرار والنقاط
     const buzzerWrapper = document.getElementById('pl-buzzer-btn');
     const buzzerBtn = document.getElementById('pl-buzzer-inner-btn');
     const statusDisplay = document.getElementById('pl-status');
+    const scoreDisplay = document.getElementById('pl-team-score'); // 👈 هنا كان السر!
 
     let myTeam = null;
 
@@ -97,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
 
             // تحديث الرقم في شاشة المتسابق
-            const scoreDisplay = document.querySelector('.pl-score, #pl-score');
             if (scoreDisplay) {
                 scoreDisplay.innerText = myScore;
             }
