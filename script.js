@@ -1,9 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // 🧹 تصفير الجرس وإخبار السيرفر إن التلفزيون شغال
+    // 🧹 تصفير الجرس وإخبار السيرفر إن التلفزيون شغال وتصفير اللوحة
     if (typeof db !== 'undefined') {
         db.ref('game/buzzer').set({ status: 'waiting', team: null });
-        db.ref('game/current_letter').set(null); // تصفير الحرف
+        db.ref('game/current_letter').set(null);
+        db.ref('game/board').set(null); // 🧹 تصفير اللوحة والنقاط بالكامل أول ما يفتح الرابط
 
         const tvStatusRef = db.ref('game/tv_status');
         tvStatusRef.set('online');
@@ -339,14 +340,14 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 📡 نظام التنبيه الذكي للتلفزيون (بالعبارات الحماسية)
+    // 📡 نظام التنبيه الذكي للتلفزيون (بالعبارات الحماسية وعكس الأماكن)
     // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
         <div class="buzzer-alert-box" id="tv-buzzer-box">
-            <div class="buzzer-alert-title" id="tv-buzzer-title">🔔 تم الضغط 🔔</div>
-            <div class="buzzer-alert-team" id="tv-buzzer-team-name">الفريق</div>
+            <div class="buzzer-alert-team" id="tv-buzzer-team-name" style="font-size: 3.5rem; margin-bottom: 10px; font-weight: bold;">الفريق</div>
+            <div class="buzzer-alert-title" id="tv-buzzer-title" style="font-size: 2rem;">🔔 تم الضغط 🔔</div>
         </div>
     `;
     document.body.appendChild(alertOverlay);

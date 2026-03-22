@@ -29,7 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setupPlayer(teamName, teamColor) {
-        // 💡 هنا الحل: إخفاء الاختيار وإظهار الجرس!
         if (selectionOverlay) selectionOverlay.style.display = 'none';
         if (buzzerScreen) buzzerScreen.style.display = 'flex';
 
@@ -37,13 +36,12 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.style.setProperty('--pl-active-color', teamColor);
     }
 
-    // 2. 📡 السحر: الاستماع للسيرفر (هل الجرس مفتوح أو مقفول؟)
+    // 2. 📡 السحر: الاستماع للسيرفر
     if (typeof db !== 'undefined') {
         db.ref('game/buzzer').on('value', (snapshot) => {
             const data = snapshot.val();
             if (!data) return;
 
-            // إذا المقدم اختار حرف وفتح الجرس
             if (data.status === 'waiting') {
                 if (statusDisplay) {
                     statusDisplay.innerText = 'جاهز! 🟢 (اضغط بسرعة)';
@@ -51,17 +49,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
                 if (buzzerWrapper) buzzerWrapper.classList.remove('pl-buzzer-locked', 'active-pressed');
             }
-            // إذا فيه أحد ضغط الجرس
             else if (data.status === 'pressed') {
                 if (data.team === myTeam) {
-                    // إذا فريقي هو اللي ضغط
                     if (statusDisplay) {
                         statusDisplay.innerText = 'أنت الأسرع! 🚀';
                         statusDisplay.className = 'pl-status pl-go';
                     }
                     if (buzzerWrapper) buzzerWrapper.classList.add('active-pressed');
                 } else {
-                    // إذا الخصم سبقني وضغط
                     if (statusDisplay) {
                         statusDisplay.innerText = 'مقفول 🔴 (الخصم أسرع)';
                         statusDisplay.className = 'pl-status pl-locked';
@@ -86,5 +81,26 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             });
         }
+
+        // ==========================================
+        // 💯 نظام مزامنة النقاط في جوال المتسابق
+        // ==========================================
+        db.ref('game/board').on('value', (snapshot) => {
+            const boardData = snapshot.val() || {};
+            let myScore = 0;
+            let myTeamString = myTeam === 1 ? 'team1' : 'team2';
+
+            for (let hex in boardData) {
+                if (boardData[hex] === myTeamString) {
+                    myScore++;
+                }
+            }
+
+            // تحديث الرقم في شاشة المتسابق
+            const scoreDisplay = document.querySelector('.pl-score, #pl-score');
+            if (scoreDisplay) {
+                scoreDisplay.innerText = myScore;
+            }
+        });
     }
 });
