@@ -1,11 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // 🌟 استخراج رقم الغرفة السري من الرابط
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('room') || 'test_room'; // لو فتحت الرابط بدون باركود بيدخلك غرفة اختبار
+
     // 📡 فحص اتصال التلفزيون الحقيقي
     const statusBadge = document.querySelector('.pr-floating-status');
     if (statusBadge && typeof db !== 'undefined') {
-        db.ref('game/tv_status').on('value', (snapshot) => {
+        db.ref('rooms/' + roomId + '/tv_status').on('value', (snapshot) => {
             if (snapshot.val() === 'online') {
-                statusBadge.innerHTML = 'متصل بالشاشة 🟢';
+                statusBadge.innerHTML = 'متصل بالغرفة ' + roomId + ' 🟢';
                 statusBadge.style.color = '#00E676';
             } else {
                 statusBadge.innerHTML = 'الشاشة مغلقة 🔴';
@@ -51,11 +55,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
     updatePresenterSettings();
 
-    // 🎨 تلوين لوحة المقدم بالتزامن مع التلفزيون (وإخفاء الزر العشوائي بعد البداية)
+    // 🎨 تلوين لوحة المقدم بالتزامن مع التلفزيون
     if (typeof db !== 'undefined') {
-        db.ref('game/board').on('value', (snapshot) => {
+        db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
-            let isGameStarted = false; // 💡 فحص هل بدأت اللعبة وتم تلوين أي خلية؟
+            let isGameStarted = false;
 
             allHexes.forEach(hex => {
                 const letter = hex.innerText.trim();
@@ -63,14 +67,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
                 if (boardData[letter] === 'team1') {
                     hex.classList.add('team1-captured');
-                    isGameStarted = true; // اللعبة بدأت
+                    isGameStarted = true;
                 } else if (boardData[letter] === 'team2') {
                     hex.classList.add('team2-captured');
-                    isGameStarted = true; // اللعبة بدأت
+                    isGameStarted = true;
                 }
             });
 
-            // 💡 السحر: إخفاء زر العشوائي إذا بدأت اللعبة، وإظهاره إذا اللوحة فاضية
             if (isGameStarted) {
                 randomBtn.style.display = 'none';
             } else {
@@ -98,10 +101,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             this.style.transform = 'scale(1.2)'; this.style.filter = 'brightness(1.3)'; this.style.zIndex = '10';
 
-            // 📡 السحر: فتح الجرس للفرق وإرسال الحرف للتلفزيون عشان يلمع
             if (typeof db !== 'undefined') {
-                db.ref('game/buzzer').set({ status: 'waiting', team: null });
-                db.ref('game/current_letter').set(letter);
+                db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
+                db.ref('rooms/' + roomId + '/current_letter').set(letter);
             }
         });
     });
@@ -116,15 +118,14 @@ document.addEventListener("DOMContentLoaded", () => {
         randomHex.click();
     });
 
-    // 📡 إرسال أمر تلوين اللوحة وإخفاء لمعان الحرف
     btnTeam1.addEventListener('click', () => {
         const letter = activeLetterBadge.innerText.trim();
         if (!letter || letter === '-') return;
 
         if (typeof db !== 'undefined') {
-            db.ref('game/board/' + letter).set('team1');
-            db.ref('game/buzzer').set({ status: 'waiting', team: null });
-            db.ref('game/current_letter').set(null); // مسح اللمعان من التلفزيون
+            db.ref('rooms/' + roomId + '/board/' + letter).set('team1');
+            db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
+            db.ref('rooms/' + roomId + '/current_letter').set(null);
         }
     });
 
@@ -133,9 +134,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!letter || letter === '-') return;
 
         if (typeof db !== 'undefined') {
-            db.ref('game/board/' + letter).set('team2');
-            db.ref('game/buzzer').set({ status: 'waiting', team: null });
-            db.ref('game/current_letter').set(null);
+            db.ref('rooms/' + roomId + '/board/' + letter).set('team2');
+            db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
+            db.ref('rooms/' + roomId + '/current_letter').set(null);
         }
     });
 
@@ -144,9 +145,9 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!letter || letter === '-') return;
 
         if (typeof db !== 'undefined') {
-            db.ref('game/board/' + letter).set('neutral');
-            db.ref('game/buzzer').set({ status: 'waiting', team: null });
-            db.ref('game/current_letter').set(null);
+            db.ref('rooms/' + roomId + '/board/' + letter).set('neutral');
+            db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
+            db.ref('rooms/' + roomId + '/current_letter').set(null);
         }
     });
 

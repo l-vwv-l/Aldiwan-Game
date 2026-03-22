@@ -1,12 +1,20 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // 🌟 السحر الجديد: توليد رقم غرفة (مع حماية التلفزيون ضد التحديث وانقطاع النت!)
+    let roomId = sessionStorage.getItem('diwanGameRoom');
+    if (!roomId) {
+        roomId = Math.floor(10000 + Math.random() * 90000).toString();
+        sessionStorage.setItem('diwanGameRoom', roomId);
+    }
+    console.log("أنت الآن في الغرفة رقم: ", roomId);
+
     // 🧹 تصفير الجرس وإخبار السيرفر إن التلفزيون شغال وتصفير اللوحة
     if (typeof db !== 'undefined') {
-        db.ref('game/buzzer').set({ status: 'waiting', team: null });
-        db.ref('game/current_letter').set(null);
-        db.ref('game/board').set(null); // 🧹 تصفير اللوحة والنقاط بالكامل أول ما يفتح الرابط
+        db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
+        db.ref('rooms/' + roomId + '/current_letter').set(null);
+        db.ref('rooms/' + roomId + '/board').set(null); // تصفير اللوحة
 
-        const tvStatusRef = db.ref('game/tv_status');
+        const tvStatusRef = db.ref('rooms/' + roomId + '/tv_status');
         tvStatusRef.set('online');
         tvStatusRef.onDisconnect().set('offline');
     }
@@ -16,14 +24,14 @@ document.addEventListener("DOMContentLoaded", () => {
     setTimeout(() => {
         if (document.getElementById("qr-presenter")) {
             new QRCode(document.getElementById("qr-presenter"), {
-                text: gameUrl + "/presenter.html",
+                text: gameUrl + "/presenter.html?room=" + roomId,
                 width: 180, height: 180,
                 colorDark: "#3a1c4a", colorLight: "#ffffff",
             });
         }
         if (document.getElementById("qr-player")) {
             new QRCode(document.getElementById("qr-player"), {
-                text: gameUrl + "/player.html",
+                text: gameUrl + "/player.html?room=" + roomId,
                 width: 180, height: 180,
                 colorDark: "#3a1c4a", colorLight: "#ffffff",
             });
@@ -83,7 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
         logoWrapper.classList.remove("floating-logo");
 
         if (typeof db !== 'undefined') {
-            db.ref('game/buzzer').set({ status: 'waiting', team: null });
+            db.ref('rooms/' + roomId + '/buzzer').set({ status: 'waiting', team: null });
         }
 
         setTimeout(() => { w3.classList.remove("pop-in"); }, 100);
@@ -339,9 +347,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
-    // ==========================================
-    // 📡 نظام التنبيه الذكي للتلفزيون (بالعبارات الحماسية وعكس الأماكن)
-    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
@@ -356,7 +361,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
     const tvBuzzerTitle = document.getElementById('tv-buzzer-title');
 
-    // 🤩 عبارات حماسية وفلاوية تتغير كل مرة يضغطون فيها الجرس!
     const hypePhrases = [
         "أووووه! أسرع من البرق ⚡️",
         "يا ساتر على السرعة! 🚀",
@@ -370,14 +374,13 @@ document.addEventListener("DOMContentLoaded", () => {
     ];
 
     if (typeof db !== 'undefined') {
-        db.ref('game/buzzer').on('value', (snapshot) => {
+        db.ref('rooms/' + roomId + '/buzzer').on('value', (snapshot) => {
             const data = snapshot.val();
             if (data && data.status === 'pressed') {
                 const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
                 let tName = data.team === 1 ? (settings.team1Name || "الفريق الأول") : (settings.team2Name || "الفريق الثاني");
                 let tColor = data.team === 1 ? (settings.team1Color || "#FF9100") : (settings.team2Color || "#10b981");
 
-                // سحب جملة عشوائية
                 const randomHype = hypePhrases[Math.floor(Math.random() * hypePhrases.length)];
                 tvBuzzerTitle.innerText = randomHype;
 
@@ -391,11 +394,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ==========================================
-    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط 💯
-    // ==========================================
     if (typeof db !== 'undefined') {
-        db.ref('game/board').on('value', (snapshot) => {
+        db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
             const allTvHexes = document.querySelectorAll('#board-container .board-hex');
 
@@ -405,10 +405,8 @@ document.addEventListener("DOMContentLoaded", () => {
             allTvHexes.forEach(hex => {
                 const letter = hex.querySelector('span').innerText.trim();
 
-                // تنظيف الألوان القديمة
                 hex.classList.remove('team1-captured', 'team2-captured');
 
-                // تلوين حسب السيرفر وحساب النقاط
                 if (boardData[letter] === 'team1') {
                     hex.classList.add('team1-captured');
                     team1Score++;
@@ -418,16 +416,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             });
 
-            // 💯 تحديث الأرقام في شريط التلفزيون العلوي
             const scoreElements = document.querySelectorAll('.score-hex span');
             if (scoreElements.length >= 2) {
-                scoreElements[0].innerText = team1Score; // الفريق الأول (يمين)
-                scoreElements[1].innerText = team2Score; // الفريق الثاني (يسار)
+                scoreElements[0].innerText = team1Score;
+                scoreElements[1].innerText = team2Score;
             }
         });
 
-        // 🎯 مراقبة الحرف المختار من المقدم وإبرازه في التلفزيون
-        db.ref('game/current_letter').on('value', (snapshot) => {
+        db.ref('rooms/' + roomId + '/current_letter').on('value', (snapshot) => {
             const activeLetter = snapshot.val();
             const allTvHexes = document.querySelectorAll('#board-container .board-hex');
 

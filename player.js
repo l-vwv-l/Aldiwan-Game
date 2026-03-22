@@ -1,6 +1,10 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // ربط العناصر بالأسماء الصحيحة في ملف HTML حقك
+    // 🌟 استخراج رقم الغرفة السري من الرابط
+    const urlParams = new URLSearchParams(window.location.search);
+    const roomId = urlParams.get('room') || 'test_room';
+
+    // ربط العناصر
     const selectionOverlay = document.getElementById('pl-team-selection');
     const buzzerScreen = document.getElementById('pl-buzzer-screen');
 
@@ -9,11 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const teamNameDisplay = document.getElementById('pl-team-name');
 
-    // الأزرار والنقاط
     const buzzerWrapper = document.getElementById('pl-buzzer-btn');
     const buzzerBtn = document.getElementById('pl-buzzer-inner-btn');
     const statusDisplay = document.getElementById('pl-status');
-    const scoreDisplay = document.getElementById('pl-team-score'); // 👈 هنا كان السر!
+    const scoreDisplay = document.getElementById('pl-team-score');
 
     let myTeam = null;
 
@@ -38,9 +41,9 @@ document.addEventListener("DOMContentLoaded", () => {
         document.documentElement.style.setProperty('--pl-active-color', teamColor);
     }
 
-    // 2. 📡 السحر: الاستماع للسيرفر
+    // 2. 📡 السحر: الاستماع للسيرفر حسب الغرفة
     if (typeof db !== 'undefined') {
-        db.ref('game/buzzer').on('value', (snapshot) => {
+        db.ref('rooms/' + roomId + '/buzzer').on('value', (snapshot) => {
             const data = snapshot.val();
             if (!data) return;
 
@@ -68,14 +71,14 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // 3. 🚀 إرسال الضغطة للسيرفر
+        // 3. 🚀 إرسال الضغطة لغرفتي في السيرفر
         if (buzzerBtn) {
             buzzerBtn.addEventListener('click', () => {
                 if (buzzerWrapper && buzzerWrapper.classList.contains('pl-buzzer-locked')) return;
 
-                db.ref('game/buzzer/status').once('value').then((snapshot) => {
+                db.ref('rooms/' + roomId + '/buzzer/status').once('value').then((snapshot) => {
                     if (snapshot.val() === 'waiting') {
-                        db.ref('game/buzzer').set({
+                        db.ref('rooms/' + roomId + '/buzzer').set({
                             status: 'pressed',
                             team: myTeam
                         });
@@ -84,10 +87,8 @@ document.addEventListener("DOMContentLoaded", () => {
             });
         }
 
-        // ==========================================
-        // 💯 نظام مزامنة النقاط في جوال المتسابق
-        // ==========================================
-        db.ref('game/board').on('value', (snapshot) => {
+        // 💯 نظام مزامنة النقاط
+        db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
             let myScore = 0;
             let myTeamString = myTeam === 1 ? 'team1' : 'team2';
@@ -98,7 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 }
             }
 
-            // تحديث الرقم في شاشة المتسابق
             if (scoreDisplay) {
                 scoreDisplay.innerText = myScore;
             }
