@@ -22,10 +22,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const answerText = document.getElementById('pr-answer-text');
     const randomBtn = document.querySelector('.pr-random-btn');
 
+    const dummyQuestions = {
+        'س': { q: 'ما هي عاصمة المملكة العربية السعودية؟', a: 'الرياض' },
+        'م': { q: 'من هو مؤسس المملكة العربية السعودية؟', a: 'الملك عبدالعزيز' },
+        'ك': { q: 'حيوان يلقب بسفينة الصحراء؟', a: 'الجمل (البعير)' }
+    };
+
     const btnTeam1 = document.querySelector('.pr-btn-team1');
     const btnTeam2 = document.querySelector('.pr-btn-team2');
     const presenterCompName = document.getElementById('pr-comp-name');
 
+    // 🎨 السحر: تحديث الألوان والأسماء من السيرفر مباشرة عشان تتوافق مع إعدادات التلفزيون
     function updatePresenterSettings(settings) {
         if (presenterCompName) presenterCompName.innerText = settings.compName || "الديوان";
         if (btnTeam1) {
@@ -43,19 +50,10 @@ document.addEventListener("DOMContentLoaded", () => {
             if (snapshot.val()) {
                 updatePresenterSettings(snapshot.val());
             } else {
+                // إذا ماله إعدادات في السيرفر يجيب من الذاكرة الاحتياطية
                 const saved = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
                 updatePresenterSettings(saved);
             }
-        });
-    }
-
-    // ==========================================
-    // 📝 جلب الأسئلة الحقيقية من السيرفر! 
-    // ==========================================
-    let roomQuestions = {};
-    if (typeof db !== 'undefined') {
-        db.ref('rooms/' + roomId + '/questions').on('value', (snapshot) => {
-            roomQuestions = snapshot.val() || {};
         });
     }
 
@@ -90,13 +88,12 @@ document.addEventListener("DOMContentLoaded", () => {
             const letter = this.innerText.trim();
             activeLetterBadge.innerText = letter;
 
-            // قراءة السؤال من الأسئلة المجلوبة من البوابة
-            if (roomQuestions[letter]) {
-                questionText.innerText = roomQuestions[letter].q;
-                answerText.innerText = roomQuestions[letter].a;
+            if (dummyQuestions[letter]) {
+                questionText.innerText = dummyQuestions[letter].q;
+                answerText.innerText = dummyQuestions[letter].a;
             } else {
-                questionText.innerText = `لم يتم إضافة سؤال لحرف (${letter}) في البوابة ⚠️`;
-                answerText.innerText = "لا توجد إجابة";
+                questionText.innerText = `سؤال يبدأ بحرف (${letter}) ... (هنا يظهر السؤال)`;
+                answerText.innerText = "(تظهر الإجابة هنا)";
             }
 
             allHexes.forEach(h => {
@@ -155,9 +152,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // 🙋‍♂️ إرسال إشارة الدخول للمقدم للتلفزيون
     if (typeof db !== 'undefined') {
         const presenceRef = db.ref('rooms/' + roomId + '/presence/presenter');
         presenceRef.set('online');
         presenceRef.onDisconnect().set('offline');
     }
+
 });

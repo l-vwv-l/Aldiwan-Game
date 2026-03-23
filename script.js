@@ -49,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const w3 = document.getElementById("w3");
     const logoWrapper = document.getElementById("logo-wrapper");
     const lobbyControls = document.getElementById("lobby-controls");
+
     const tvControls = document.getElementById("tv-controls");
     const btnTvStart = document.getElementById("btn-tv-start");
 
@@ -84,7 +85,9 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("btn-start-from-lobby").addEventListener("click", () => {
+
         isGameRunning = true;
+
         document.getElementById("lobby-screen").style.display = "none";
 
         if (typeof db !== 'undefined') {
@@ -100,6 +103,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             document.getElementById("glass-layer").style.display = "none";
+
             const transScreen = document.getElementById("transition-screen");
             transScreen.style.display = "flex";
 
@@ -178,6 +182,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (btnSaveSettings) {
         btnSaveSettings.addEventListener("click", () => {
+
             const aiBtn = document.querySelector('#setting-presenter-type .sp-seg-btn[data-type="ai"]');
             if (aiBtn && aiBtn.classList.contains('active')) {
                 alert("المقدم الآلي تحت التطوير حالياً ⏳ سيتم تفعيل المقدم البشري مؤقتاً.");
@@ -259,7 +264,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 🚨 إنشاء شاشة الإيقاف الذكية (تجميد اللعبة + إظهار الباركود) 
+    // 🚨 إنشاء شاشة الإيقاف الذكية (تجميد اللعبة + إظهار الباركود) 🚨
     // ==========================================
     const disconnectOverlay = document.createElement('div');
     disconnectOverlay.id = 'tv-disconnect-overlay';
@@ -297,6 +302,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
+                // 🚨 إذا اللعبة شغالة وواحد فصل، حطه في القائمة
                 if (isGameRunning) {
                     if (status !== 'online') {
                         disconnectedPlayers.add(role);
@@ -315,6 +321,7 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
+        // 🚨 دالة تحديث شاشة الإيقاف
         function updateDisconnectScreen() {
             const overlay = document.getElementById('tv-disconnect-overlay');
             const textEl = document.getElementById('disconnect-text');
@@ -323,7 +330,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (disconnectedPlayers.size > 0) {
                 let names = [];
-                qrsContainer.innerHTML = '';
+                qrsContainer.innerHTML = ''; // مسح القديم
 
                 disconnectedPlayers.forEach(role => {
                     let roleName = ""; let roleUrl = ""; let roleColor = "";
@@ -334,6 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     names.push(roleName);
 
+                    // إنشاء مربع الباركود الخاص بالشخص اللي فصل
                     const box = document.createElement('div');
                     box.style.cssText = `background: rgba(255,255,255,0.05); padding: 30px; border-radius: 25px; border: 4px solid ${roleColor}; text-align: center; box-shadow: 0 0 30px ${roleColor}40;`;
                     box.innerHTML = `<h3 style="color: ${roleColor}; margin-bottom: 20px; font-size: 2.2rem; margin-top: 0;">${roleName}</h3>`;
@@ -347,9 +355,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 textEl.innerText = `انقطع الاتصال بـ (${names.join(' و ')}) .. امسح الباركود للعودة ⏳`;
-                overlay.style.display = 'flex';
+                overlay.style.display = 'flex'; // تجميد اللعبة!
             } else {
-                overlay.style.display = 'none';
+                overlay.style.display = 'none'; // إكمال اللعب
             }
         }
     }
@@ -400,9 +408,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 400);
     });
 
-    // ==========================================
-    // 📝 سحر بوابة الأسئلة (حفظ ورفع للسيرفر)
-    // ==========================================
     const portalKeys = document.querySelectorAll('.portal-key');
     const portalInstruction = document.getElementById('portal-instruction');
     const portalForm = document.getElementById('portal-form');
@@ -412,73 +417,38 @@ document.addEventListener("DOMContentLoaded", () => {
     const customQInput = document.getElementById('custom-q-input');
     const customAInput = document.getElementById('custom-a-input');
 
-    // 1. جلب الأسئلة القديمة من الذاكرة المحلية عشان ما تنمسح
-    let customQuestionsData = JSON.parse(localStorage.getItem('diwanCustomQuestions')) || {};
+    let customQuestionsData = {};
 
-    // 2. رفعها للسيرفر فوراً عشان يشوفها المقدم أول ما يدخل
-    if (typeof db !== 'undefined') {
-        db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
-    }
-
-    // تلوين الحروف اللي فيها أسئلة محفوظة مسبقاً
     portalKeys.forEach(key => {
-        const letter = key.innerText;
-        if (customQuestionsData[letter]) {
-            key.classList.add('has-data');
-        }
-
         key.addEventListener('click', function () {
             portalKeys.forEach(k => k.classList.remove('active-key')); this.classList.add('active-key');
-            const clickedLetter = this.innerText;
-            portalInstruction.style.display = 'none'; portalForm.style.display = 'block'; selectedLetterDisplay.innerText = clickedLetter;
-
-            if (customQuestionsData[clickedLetter]) {
-                customQInput.value = customQuestionsData[clickedLetter].q;
-                customAInput.value = customQuestionsData[clickedLetter].a;
-                btnDeleteQuestion.style.display = 'block';
+            const letter = this.innerText;
+            portalInstruction.style.display = 'none'; portalForm.style.display = 'block'; selectedLetterDisplay.innerText = letter;
+            if (customQuestionsData[letter]) {
+                customQInput.value = customQuestionsData[letter].q; customAInput.value = customQuestionsData[letter].a; btnDeleteQuestion.style.display = 'block';
             } else {
                 customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
             }
         });
     });
 
-    // زر حفظ السؤال
     btnSaveQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
         const letter = activeKey.innerText; const q = customQInput.value.trim(); const a = customAInput.value.trim();
         if (q && a) {
-            customQuestionsData[letter] = { q, a };
-            activeKey.classList.add('has-data');
-            btnDeleteQuestion.style.display = 'block';
-
-            // حفظ في الذاكرة + السيرفر ☁️
-            localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
-            if (typeof db !== 'undefined') {
-                db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
-            }
-
+            customQuestionsData[letter] = { q, a }; activeKey.classList.add('has-data'); btnDeleteQuestion.style.display = 'block';
             btnSaveQuestion.innerText = "تم الحفظ بنجاح ✔️"; btnSaveQuestion.style.background = "#FFD700";
             setTimeout(() => { btnSaveQuestion.innerText = "حفظ السؤال ✔️"; btnSaveQuestion.style.background = "#00E676"; }, 1500);
         }
     });
 
-    // زر حذف السؤال
     btnDeleteQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
         const letter = activeKey.innerText;
-
-        delete customQuestionsData[letter];
-        activeKey.classList.remove('has-data');
+        delete customQuestionsData[letter]; activeKey.classList.remove('has-data');
         customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
-
-        // تحديث الذاكرة + السيرفر بعد الحذف ☁️
-        localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
-        if (typeof db !== 'undefined') {
-            db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
-        }
-
         btnDeleteQuestion.innerText = "تم الحذف ✔️"; btnDeleteQuestion.style.display = 'block';
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
