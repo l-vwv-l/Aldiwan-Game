@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-    // متغير ذكي عشان نعرف هل اللعبة بدأت فعلاً ولا لسه في غرفة الانتظار؟
     let isGameRunning = false;
 
     let roomId = sessionStorage.getItem('diwanGameRoom');
@@ -87,7 +86,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById("btn-start-from-lobby").addEventListener("click", () => {
 
-        isGameRunning = true; // 🚨 إعلان إن اللعبة بدأت رسمياً! السيرفر بيبدأ يراقب اللي يفصل!
+        isGameRunning = true;
 
         document.getElementById("lobby-screen").style.display = "none";
 
@@ -265,33 +264,31 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     // ==========================================
-    // 🚨 إنشاء شريط التنبيه الذكي لانقطاع الاتصال (أثناء اللعب)
+    // 🚨 إنشاء شاشة الإيقاف الذكية (تجميد اللعبة + إظهار الباركود) 🚨
     // ==========================================
-    const disconnectBanner = document.createElement('div');
-    disconnectBanner.id = 'tv-disconnect-banner';
-    disconnectBanner.style.cssText = `
-        position: fixed; top: -150px; left: 50%; transform: translateX(-50%);
-        background: rgba(220, 38, 38, 0.95); color: white; padding: 20px 40px; 
-        border-radius: 0 0 30px 30px; font-size: 2rem; font-weight: bold; 
-        z-index: 9999; box-shadow: 0 10px 30px rgba(220, 38, 38, 0.5);
-        transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-        display: flex; align-items: center; gap: 15px; border: 2px solid #fca5a5; border-top: none;
+    const disconnectOverlay = document.createElement('div');
+    disconnectOverlay.id = 'tv-disconnect-overlay';
+    disconnectOverlay.style.cssText = `
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+        background: rgba(15, 5, 24, 0.95); backdrop-filter: blur(15px);
+        display: none; flex-direction: column; align-items: center; justify-content: center;
+        z-index: 99999; font-family: 'Lalezar', cursive;
     `;
-    disconnectBanner.innerHTML = `⚠️ <span id="disconnect-banner-text">انقطع الاتصال</span>`;
-    document.body.appendChild(disconnectBanner);
+    disconnectOverlay.innerHTML = `
+        <div style="font-size: 5rem; color: #ef4444; margin-bottom: 20px; text-shadow: 0 0 30px rgba(239,68,68,0.8);">⚠️ اللعبة متوقفة مؤقتاً ⚠️</div>
+        <div id="disconnect-text" style="font-size: 2.5rem; color: white; margin-bottom: 50px;">ننتظر عودة...</div>
+        <div id="disconnect-qrs" style="display: flex; gap: 50px; justify-content: center; flex-wrap: wrap;"></div>
+    `;
+    document.body.appendChild(disconnectOverlay);
 
-    // ==========================================
-    // 🕵️‍♂️ نظام (تم الدخول / انقطاع الاتصال) الشامل
-    // ==========================================
     if (typeof db !== 'undefined') {
         const roles = ['presenter', 'team1', 'team2'];
-        let disconnectedPlayers = new Set(); // قائمة باللي فاصل نتهم
+        let disconnectedPlayers = new Set();
 
         roles.forEach(role => {
             db.ref('rooms/' + roomId + '/presence/' + role).on('value', (snap) => {
                 const status = snap.val();
 
-                // 1️⃣ معالجة شاشة غرفة الانتظار (Lobby)
                 const qrContainer = document.getElementById('qr-' + role + '-lobby-container');
                 const statusContainer = document.getElementById('status-' + role + '-lobby');
 
@@ -305,18 +302,17 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                // 2️⃣ معالجة انقطاع الاتصال (أثناء اللعب الفعلي)
+                // 🚨 إذا اللعبة شغالة وواحد فصل، حطه في القائمة
                 if (isGameRunning) {
                     if (status !== 'online') {
                         disconnectedPlayers.add(role);
                     } else {
                         disconnectedPlayers.delete(role);
                     }
-                    updateDisconnectBanner();
+                    updateDisconnectScreen();
                 }
             });
 
-            // برمجة زر (إظهار الباركود 🔄)
             const resetBtn = document.getElementById('btn-reset-' + role);
             if (resetBtn) {
                 resetBtn.addEventListener('click', () => {
@@ -325,24 +321,43 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // دالة تحديث شريط التنبيه العلوي بناءً على مين اللي فاصل
-        function updateDisconnectBanner() {
-            const banner = document.getElementById('tv-disconnect-banner');
-            const textEl = document.getElementById('disconnect-banner-text');
+        // 🚨 دالة تحديث شاشة الإيقاف
+        function updateDisconnectScreen() {
+            const overlay = document.getElementById('tv-disconnect-overlay');
+            const textEl = document.getElementById('disconnect-text');
+            const qrsContainer = document.getElementById('disconnect-qrs');
             const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
 
             if (disconnectedPlayers.size > 0) {
                 let names = [];
-                disconnectedPlayers.forEach(r => {
-                    if (r === 'presenter') names.push("المقدم 🎙️");
-                    if (r === 'team1') names.push(settings.team1Name || "الفريق الأول");
-                    if (r === 'team2') names.push(settings.team2Name || "الفريق الثاني");
+                qrsContainer.innerHTML = ''; // مسح القديم
+
+                disconnectedPlayers.forEach(role => {
+                    let roleName = ""; let roleUrl = ""; let roleColor = "";
+
+                    if (role === 'presenter') { roleName = "المقدم 🎙️"; roleUrl = gameUrl + "/presenter.html?room=" + roomId; roleColor = "#8b5cf6"; }
+                    if (role === 'team1') { roleName = settings.team1Name || "الفريق الأول"; roleUrl = gameUrl + "/player.html?room=" + roomId + "&team=1"; roleColor = "#FF9100"; }
+                    if (role === 'team2') { roleName = settings.team2Name || "الفريق الثاني"; roleUrl = gameUrl + "/player.html?room=" + roomId + "&team=2"; roleColor = "#10b981"; }
+
+                    names.push(roleName);
+
+                    // إنشاء مربع الباركود الخاص بالشخص اللي فصل
+                    const box = document.createElement('div');
+                    box.style.cssText = `background: rgba(255,255,255,0.05); padding: 30px; border-radius: 25px; border: 4px solid ${roleColor}; text-align: center; box-shadow: 0 0 30px ${roleColor}40;`;
+                    box.innerHTML = `<h3 style="color: ${roleColor}; margin-bottom: 20px; font-size: 2.2rem; margin-top: 0;">${roleName}</h3>`;
+
+                    const qrDiv = document.createElement('div');
+                    qrDiv.style.cssText = `background: white; padding: 15px; border-radius: 15px; display: inline-block;`;
+                    new QRCode(qrDiv, { text: roleUrl, width: 180, height: 180, colorDark: "#000000", colorLight: "#ffffff" });
+
+                    box.appendChild(qrDiv);
+                    qrsContainer.appendChild(box);
                 });
 
-                textEl.innerText = `تنبيه: انقطع الاتصال بـ (${names.join(' و ')})! ننتظر عودتهم... ⏳`;
-                banner.style.top = '0'; // ينزل الشريط
+                textEl.innerText = `انقطع الاتصال بـ (${names.join(' و ')}) .. امسح الباركود للعودة ⏳`;
+                overlay.style.display = 'flex'; // تجميد اللعبة!
             } else {
-                banner.style.top = '-150px'; // يرتفع ويختفي إذا الكل موجود
+                overlay.style.display = 'none'; // إكمال اللعب
             }
         }
     }
@@ -438,9 +453,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
-    // ==========================================
-    // 📡 نظام التنبيه الذكي للتلفزيون (الجرس)
-    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
@@ -455,17 +467,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
     const tvBuzzerTitle = document.getElementById('tv-buzzer-title');
 
-    const hypePhrases = [
-        "أووووه! أسرع من البرق ⚡️",
-        "يا ساتر على السرعة! 🚀",
-        "الذيب اللي لقطها 🐺🔥",
-        "عندهم العلم! 🧠✨",
-        "بومممم! ضربة معلم 💥",
-        "وحووووش الشاشة 🦍💪",
-        "ما يمزحووووون! 🔥",
-        "اللي سبق لبق 😉🏃‍♂️",
-        "يا ويلكم منهم 🚨"
-    ];
+    const hypePhrases = ["أووووه! أسرع من البرق ⚡️", "يا ساتر على السرعة! 🚀", "الذيب اللي لقطها 🐺🔥", "عندهم العلم! 🧠✨", "بومممم! ضربة معلم 💥", "وحووووش الشاشة 🦍💪", "ما يمزحووووون! 🔥", "اللي سبق لبق 😉🏃‍♂️", "يا ويلكم منهم 🚨"];
 
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/buzzer').on('value', (snapshot) => {
@@ -488,9 +490,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // ==========================================
-    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط
-    // ==========================================
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
