@@ -1,5 +1,8 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+    // متغير ذكي عشان نعرف هل اللعبة بدأت فعلاً ولا لسه في غرفة الانتظار؟
+    let isGameRunning = false;
+
     let roomId = sessionStorage.getItem('diwanGameRoom');
     if (!roomId) {
         roomId = Math.floor(10000 + Math.random() * 90000).toString();
@@ -83,6 +86,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     document.getElementById("btn-start-from-lobby").addEventListener("click", () => {
+
+        isGameRunning = true; // 🚨 إعلان إن اللعبة بدأت رسمياً! السيرفر بيبدأ يراقب اللي يفصل!
 
         document.getElementById("lobby-screen").style.display = "none";
 
@@ -259,12 +264,34 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // ==========================================
+    // 🚨 إنشاء شريط التنبيه الذكي لانقطاع الاتصال (أثناء اللعب)
+    // ==========================================
+    const disconnectBanner = document.createElement('div');
+    disconnectBanner.id = 'tv-disconnect-banner';
+    disconnectBanner.style.cssText = `
+        position: fixed; top: -150px; left: 50%; transform: translateX(-50%);
+        background: rgba(220, 38, 38, 0.95); color: white; padding: 20px 40px; 
+        border-radius: 0 0 30px 30px; font-size: 2rem; font-weight: bold; 
+        z-index: 9999; box-shadow: 0 10px 30px rgba(220, 38, 38, 0.5);
+        transition: top 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        display: flex; align-items: center; gap: 15px; border: 2px solid #fca5a5; border-top: none;
+    `;
+    disconnectBanner.innerHTML = `⚠️ <span id="disconnect-banner-text">انقطع الاتصال</span>`;
+    document.body.appendChild(disconnectBanner);
+
+    // ==========================================
+    // 🕵️‍♂️ نظام (تم الدخول / انقطاع الاتصال) الشامل
+    // ==========================================
     if (typeof db !== 'undefined') {
         const roles = ['presenter', 'team1', 'team2'];
+        let disconnectedPlayers = new Set(); // قائمة باللي فاصل نتهم
 
         roles.forEach(role => {
             db.ref('rooms/' + roomId + '/presence/' + role).on('value', (snap) => {
                 const status = snap.val();
+
+                // 1️⃣ معالجة شاشة غرفة الانتظار (Lobby)
                 const qrContainer = document.getElementById('qr-' + role + '-lobby-container');
                 const statusContainer = document.getElementById('status-' + role + '-lobby');
 
@@ -277,8 +304,19 @@ document.addEventListener("DOMContentLoaded", () => {
                         statusContainer.style.display = 'none';
                     }
                 }
+
+                // 2️⃣ معالجة انقطاع الاتصال (أثناء اللعب الفعلي)
+                if (isGameRunning) {
+                    if (status !== 'online') {
+                        disconnectedPlayers.add(role);
+                    } else {
+                        disconnectedPlayers.delete(role);
+                    }
+                    updateDisconnectBanner();
+                }
             });
 
+            // برمجة زر (إظهار الباركود 🔄)
             const resetBtn = document.getElementById('btn-reset-' + role);
             if (resetBtn) {
                 resetBtn.addEventListener('click', () => {
@@ -286,6 +324,27 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
             }
         });
+
+        // دالة تحديث شريط التنبيه العلوي بناءً على مين اللي فاصل
+        function updateDisconnectBanner() {
+            const banner = document.getElementById('tv-disconnect-banner');
+            const textEl = document.getElementById('disconnect-banner-text');
+            const settings = JSON.parse(localStorage.getItem('diwanGameSettings')) || {};
+
+            if (disconnectedPlayers.size > 0) {
+                let names = [];
+                disconnectedPlayers.forEach(r => {
+                    if (r === 'presenter') names.push("المقدم 🎙️");
+                    if (r === 'team1') names.push(settings.team1Name || "الفريق الأول");
+                    if (r === 'team2') names.push(settings.team2Name || "الفريق الثاني");
+                });
+
+                textEl.innerText = `تنبيه: انقطع الاتصال بـ (${names.join(' و ')})! ننتظر عودتهم... ⏳`;
+                banner.style.top = '0'; // ينزل الشريط
+            } else {
+                banner.style.top = '-150px'; // يرتفع ويختفي إذا الكل موجود
+            }
+        }
     }
 
     const qSourceBtns = document.querySelectorAll('#q-source-toggle .sp-seg-btn');
@@ -379,6 +438,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
+    // ==========================================
+    // 📡 نظام التنبيه الذكي للتلفزيون (الجرس)
+    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
@@ -393,7 +455,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const tvBuzzerTeamName = document.getElementById('tv-buzzer-team-name');
     const tvBuzzerTitle = document.getElementById('tv-buzzer-title');
 
-    const hypePhrases = ["أووووه! أسرع من البرق ⚡️", "يا ساتر على السرعة! 🚀", "الذيب اللي لقطها 🐺🔥", "عندهم العلم! 🧠✨", "بومممم! ضربة معلم 💥", "وحووووش الشاشة 🦍💪", "ما يمزحووووون! 🔥", "اللي سبق لبق 😉🏃‍♂️", "يا ويلكم منهم 🚨"];
+    const hypePhrases = [
+        "أووووه! أسرع من البرق ⚡️",
+        "يا ساتر على السرعة! 🚀",
+        "الذيب اللي لقطها 🐺🔥",
+        "عندهم العلم! 🧠✨",
+        "بومممم! ضربة معلم 💥",
+        "وحووووش الشاشة 🦍💪",
+        "ما يمزحووووون! 🔥",
+        "اللي سبق لبق 😉🏃‍♂️",
+        "يا ويلكم منهم 🚨"
+    ];
 
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/buzzer').on('value', (snapshot) => {
@@ -416,6 +488,9 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
+    // ==========================================
+    // 🎨 نظام تلوين اللوحة الذكي وحساب النقاط
+    // ==========================================
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/board').on('value', (snapshot) => {
             const boardData = snapshot.val() || {};
