@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", () => {
         tvStatusRef.onDisconnect().set('offline');
     }
 
-    const gameUrl = "https://cheerful-crepe-bcc27f.netlify.app";
+    const gameUrl = "https://l-vwv-l.github.io/Aldiwan-Game";
 
     setTimeout(() => {
         const pUrl = gameUrl + "/presenter.html?room=" + roomId;
