@@ -166,11 +166,16 @@ document.addEventListener("DOMContentLoaded", () => {
             btn.addEventListener("click", () => {
                 welcomeScreen.classList.add("screen-out");
                 setTimeout(() => {
-                    welcomeScreen.style.display = "none"; welcomeScreen.classList.remove("screen-out");
-                    settingsPage.classList.add("show-screen"); settingsPage.classList.add("screen-in");
+                    welcomeScreen.style.display = "none";
+                    welcomeScreen.classList.remove("screen-out");
+
+                    settingsPage.style.display = "block"; // فرض الإظهار
+                    settingsPage.style.opacity = "1";
+                    settingsPage.classList.add("show-screen", "screen-in");
                     settingsForm.classList.remove("fade-in-up", "fade-out-down");
                     settingsSaveBtn.classList.remove("fade-in-up", "fade-out-down");
                     sw1.classList.remove("pop-in"); sw2.classList.remove("pop-in"); sw3.classList.remove("pop-in");
+
                     setTimeout(() => { sw1.classList.add("pop-in"); }, 100);
                     setTimeout(() => { sw2.classList.add("pop-in"); }, 300);
                     setTimeout(() => { sw3.classList.add("pop-in"); }, 500);
@@ -182,6 +187,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (btnSaveSettings) {
         btnSaveSettings.addEventListener("click", () => {
+
+            // 🚨 منع الضغط المزدوج
+            btnSaveSettings.disabled = true;
 
             const aiBtn = document.querySelector('#setting-presenter-type .sp-seg-btn[data-type="ai"]');
             if (aiBtn && aiBtn.classList.contains('active')) {
@@ -235,13 +243,25 @@ document.addEventListener("DOMContentLoaded", () => {
             setTimeout(() => { sw1.classList.remove("pop-in"); }, 600);
 
             setTimeout(() => {
+                // 🚨 إخفاء الإعدادات بالقوة
                 settingsPage.classList.remove("show-screen", "screen-in");
-                welcomeScreen.style.display = "block"; welcomeScreen.classList.add("screen-in");
+                settingsPage.style.display = "none";
+                settingsPage.style.opacity = "0";
+
+                // 🚨 إظهار الشاشة الرئيسية بالقوة
+                welcomeScreen.style.display = "block";
+                welcomeScreen.style.opacity = "1";
+                welcomeScreen.classList.add("screen-in");
+
                 setTimeout(() => { w1.classList.add("pop-in"); }, 100);
                 setTimeout(() => { w2.classList.add("pop-in"); }, 300);
                 setTimeout(() => { w3.classList.add("pop-in"); }, 500);
                 setTimeout(() => { lobbyControls.classList.add("show-controls"); }, 800);
-                setTimeout(() => { welcomeScreen.classList.remove("screen-in"); }, 400);
+
+                setTimeout(() => {
+                    welcomeScreen.classList.remove("screen-in");
+                    btnSaveSettings.disabled = false; // إعادة تفعيل الزر
+                }, 400);
             }, 1000);
         });
     }
@@ -302,7 +322,6 @@ document.addEventListener("DOMContentLoaded", () => {
                     }
                 }
 
-                // 🚨 إذا اللعبة شغالة وواحد فصل، حطه في القائمة
                 if (isGameRunning) {
                     if (status !== 'online') {
                         disconnectedPlayers.add(role);
@@ -321,7 +340,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         });
 
-        // 🚨 دالة تحديث شاشة الإيقاف
         function updateDisconnectScreen() {
             const overlay = document.getElementById('tv-disconnect-overlay');
             const textEl = document.getElementById('disconnect-text');
@@ -330,7 +348,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if (disconnectedPlayers.size > 0) {
                 let names = [];
-                qrsContainer.innerHTML = ''; // مسح القديم
+                qrsContainer.innerHTML = '';
 
                 disconnectedPlayers.forEach(role => {
                     let roleName = ""; let roleUrl = ""; let roleColor = "";
@@ -341,7 +359,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
                     names.push(roleName);
 
-                    // إنشاء مربع الباركود الخاص بالشخص اللي فصل
                     const box = document.createElement('div');
                     box.style.cssText = `background: rgba(255,255,255,0.05); padding: 30px; border-radius: 25px; border: 4px solid ${roleColor}; text-align: center; box-shadow: 0 0 30px ${roleColor}40;`;
                     box.innerHTML = `<h3 style="color: ${roleColor}; margin-bottom: 20px; font-size: 2.2rem; margin-top: 0;">${roleName}</h3>`;
@@ -355,9 +372,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 });
 
                 textEl.innerText = `انقطع الاتصال بـ (${names.join(' و ')}) .. امسح الباركود للعودة ⏳`;
-                overlay.style.display = 'flex'; // تجميد اللعبة!
+                overlay.style.display = 'flex';
             } else {
-                overlay.style.display = 'none'; // إكمال اللعب
+                overlay.style.display = 'none';
             }
         }
     }
@@ -388,7 +405,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             settingsPage.style.display = "none"; settingsPage.classList.remove("screen-out");
-            portalScreen.classList.add("show-screen"); portalScreen.classList.add("screen-in");
+
+            portalScreen.style.display = "block"; // إظهار البوابة بالقوة
+            portalScreen.classList.add("show-screen", "screen-in");
+
             setTimeout(() => portalScreen.style.opacity = "1", 50);
             pw1.classList.remove("pop-in"); pw2.classList.remove("pop-in"); pw3.classList.remove("pop-in");
             setTimeout(() => { pw1.classList.add("pop-in"); }, 200);
@@ -402,12 +422,15 @@ document.addEventListener("DOMContentLoaded", () => {
         portalScreen.classList.add("screen-out");
         setTimeout(() => {
             portalScreen.classList.remove("show-screen", "screen-out");
-            settingsPage.style.display = "block"; settingsPage.classList.add("screen-in");
-            setTimeout(() => settingsPage.style.opacity = "1", 50);
+            portalScreen.style.display = "none"; // إخفاء البوابة بالقوة
+
+            settingsPage.style.display = "block"; // إظهار الإعدادات بالقوة
+            settingsPage.style.opacity = "1";
+            settingsPage.classList.add("show-screen", "screen-in");
+
             setTimeout(() => { settingsPage.classList.remove("screen-in"); }, 400);
         }, 400);
     });
-
 
     // ==========================================
     // 📝 سحر بوابة الأسئلة (حفظ ورفع للسيرفر)
@@ -421,15 +444,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const customQInput = document.getElementById('custom-q-input');
     const customAInput = document.getElementById('custom-a-input');
 
-    // 1. جلب الأسئلة القديمة من الذاكرة المحلية عشان ما تنمسح
     let customQuestionsData = JSON.parse(localStorage.getItem('diwanCustomQuestions')) || {};
 
-    // 2. رفعها للسيرفر فوراً عشان يشوفها المقدم أول ما يدخل
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
     }
 
-    // تلوين الحروف اللي فيها أسئلة محفوظة مسبقاً
     portalKeys.forEach(key => {
         const letter = key.innerText;
         if (customQuestionsData[letter]) {
@@ -451,7 +471,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // زر حفظ السؤال
     btnSaveQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
@@ -461,7 +480,6 @@ document.addEventListener("DOMContentLoaded", () => {
             activeKey.classList.add('has-data');
             btnDeleteQuestion.style.display = 'block';
 
-            // حفظ في الذاكرة + السيرفر ☁️
             localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
             if (typeof db !== 'undefined') {
                 db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
@@ -472,7 +490,6 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // زر حذف السؤال
     btnDeleteQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
@@ -482,7 +499,6 @@ document.addEventListener("DOMContentLoaded", () => {
         activeKey.classList.remove('has-data');
         customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
 
-        // تحديث الذاكرة + السيرفر بعد الحذف ☁️
         localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
         if (typeof db !== 'undefined') {
             db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
@@ -492,9 +508,6 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
-    // ==========================================
-    // 📡 نظام التنبيه الذكي للتلفزيون
-    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
