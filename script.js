@@ -408,6 +408,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 400);
     });
 
+
+    // ==========================================
+    // 📝 سحر بوابة الأسئلة (حفظ ورفع للسيرفر)
+    // ==========================================
     const portalKeys = document.querySelectorAll('.portal-key');
     const portalInstruction = document.getElementById('portal-instruction');
     const portalForm = document.getElementById('portal-form');
@@ -417,42 +421,80 @@ document.addEventListener("DOMContentLoaded", () => {
     const customQInput = document.getElementById('custom-q-input');
     const customAInput = document.getElementById('custom-a-input');
 
-    let customQuestionsData = {};
+    // 1. جلب الأسئلة القديمة من الذاكرة المحلية عشان ما تنمسح
+    let customQuestionsData = JSON.parse(localStorage.getItem('diwanCustomQuestions')) || {};
 
+    // 2. رفعها للسيرفر فوراً عشان يشوفها المقدم أول ما يدخل
+    if (typeof db !== 'undefined') {
+        db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
+    }
+
+    // تلوين الحروف اللي فيها أسئلة محفوظة مسبقاً
     portalKeys.forEach(key => {
+        const letter = key.innerText;
+        if (customQuestionsData[letter]) {
+            key.classList.add('has-data');
+        }
+
         key.addEventListener('click', function () {
             portalKeys.forEach(k => k.classList.remove('active-key')); this.classList.add('active-key');
-            const letter = this.innerText;
-            portalInstruction.style.display = 'none'; portalForm.style.display = 'block'; selectedLetterDisplay.innerText = letter;
-            if (customQuestionsData[letter]) {
-                customQInput.value = customQuestionsData[letter].q; customAInput.value = customQuestionsData[letter].a; btnDeleteQuestion.style.display = 'block';
+            const clickedLetter = this.innerText;
+            portalInstruction.style.display = 'none'; portalForm.style.display = 'block'; selectedLetterDisplay.innerText = clickedLetter;
+
+            if (customQuestionsData[clickedLetter]) {
+                customQInput.value = customQuestionsData[clickedLetter].q;
+                customAInput.value = customQuestionsData[clickedLetter].a;
+                btnDeleteQuestion.style.display = 'block';
             } else {
                 customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
             }
         });
     });
 
+    // زر حفظ السؤال
     btnSaveQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
         const letter = activeKey.innerText; const q = customQInput.value.trim(); const a = customAInput.value.trim();
         if (q && a) {
-            customQuestionsData[letter] = { q, a }; activeKey.classList.add('has-data'); btnDeleteQuestion.style.display = 'block';
+            customQuestionsData[letter] = { q, a };
+            activeKey.classList.add('has-data');
+            btnDeleteQuestion.style.display = 'block';
+
+            // حفظ في الذاكرة + السيرفر ☁️
+            localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
+            if (typeof db !== 'undefined') {
+                db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
+            }
+
             btnSaveQuestion.innerText = "تم الحفظ بنجاح ✔️"; btnSaveQuestion.style.background = "#FFD700";
             setTimeout(() => { btnSaveQuestion.innerText = "حفظ السؤال ✔️"; btnSaveQuestion.style.background = "#00E676"; }, 1500);
         }
     });
 
+    // زر حذف السؤال
     btnDeleteQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
         const letter = activeKey.innerText;
-        delete customQuestionsData[letter]; activeKey.classList.remove('has-data');
+
+        delete customQuestionsData[letter];
+        activeKey.classList.remove('has-data');
         customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
+
+        // تحديث الذاكرة + السيرفر بعد الحذف ☁️
+        localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
+        if (typeof db !== 'undefined') {
+            db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
+        }
+
         btnDeleteQuestion.innerText = "تم الحذف ✔️"; btnDeleteQuestion.style.display = 'block';
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
+    // ==========================================
+    // 📡 نظام التنبيه الذكي للتلفزيون
+    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
