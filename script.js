@@ -167,7 +167,6 @@ document.addEventListener("DOMContentLoaded", () => {
                 welcomeScreen.classList.add("screen-out");
                 setTimeout(() => {
                     welcomeScreen.style.display = "none"; welcomeScreen.classList.remove("screen-out");
-                    settingsPage.style.display = ""; // تنظيف الاستايل
                     settingsPage.classList.add("show-screen"); settingsPage.classList.add("screen-in");
                     settingsForm.classList.remove("fade-in-up", "fade-out-down");
                     settingsSaveBtn.classList.remove("fade-in-up", "fade-out-down");
@@ -237,11 +236,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
             setTimeout(() => {
                 settingsPage.classList.remove("show-screen", "screen-in");
-
-                // 🚨 إصلاح خطأ الجدار البنفسجي المخفي 🚨
-                settingsPage.style.display = "none";
-                settingsPage.style.opacity = "0";
-
                 welcomeScreen.style.display = "block"; welcomeScreen.classList.add("screen-in");
                 setTimeout(() => { w1.classList.add("pop-in"); }, 100);
                 setTimeout(() => { w2.classList.add("pop-in"); }, 300);
@@ -394,7 +388,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
         setTimeout(() => {
             settingsPage.style.display = "none"; settingsPage.classList.remove("screen-out");
-            portalScreen.style.display = "block"; // تأكيد إظهار البوابة
             portalScreen.classList.add("show-screen"); portalScreen.classList.add("screen-in");
             setTimeout(() => portalScreen.style.opacity = "1", 50);
             pw1.classList.remove("pop-in"); pw2.classList.remove("pop-in"); pw3.classList.remove("pop-in");
@@ -409,14 +402,16 @@ document.addEventListener("DOMContentLoaded", () => {
         portalScreen.classList.add("screen-out");
         setTimeout(() => {
             portalScreen.classList.remove("show-screen", "screen-out");
-            portalScreen.style.display = "none"; // تنظيف البوابة
-            settingsPage.style.display = ""; // تنظيف الاستايل
-            settingsPage.classList.add("show-screen"); settingsPage.classList.add("screen-in");
+            settingsPage.style.display = "block"; settingsPage.classList.add("screen-in");
             setTimeout(() => settingsPage.style.opacity = "1", 50);
             setTimeout(() => { settingsPage.classList.remove("screen-in"); }, 400);
         }, 400);
     });
 
+
+    // ==========================================
+    // 📝 سحر بوابة الأسئلة (حفظ ورفع للسيرفر)
+    // ==========================================
     const portalKeys = document.querySelectorAll('.portal-key');
     const portalInstruction = document.getElementById('portal-instruction');
     const portalForm = document.getElementById('portal-form');
@@ -426,12 +421,15 @@ document.addEventListener("DOMContentLoaded", () => {
     const customQInput = document.getElementById('custom-q-input');
     const customAInput = document.getElementById('custom-a-input');
 
+    // 1. جلب الأسئلة القديمة من الذاكرة المحلية عشان ما تنمسح
     let customQuestionsData = JSON.parse(localStorage.getItem('diwanCustomQuestions')) || {};
 
+    // 2. رفعها للسيرفر فوراً عشان يشوفها المقدم أول ما يدخل
     if (typeof db !== 'undefined') {
         db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
     }
 
+    // تلوين الحروف اللي فيها أسئلة محفوظة مسبقاً
     portalKeys.forEach(key => {
         const letter = key.innerText;
         if (customQuestionsData[letter]) {
@@ -453,6 +451,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
+    // زر حفظ السؤال
     btnSaveQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
@@ -462,6 +461,7 @@ document.addEventListener("DOMContentLoaded", () => {
             activeKey.classList.add('has-data');
             btnDeleteQuestion.style.display = 'block';
 
+            // حفظ في الذاكرة + السيرفر ☁️
             localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
             if (typeof db !== 'undefined') {
                 db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
@@ -472,6 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
+    // زر حذف السؤال
     btnDeleteQuestion.addEventListener('click', () => {
         const activeKey = document.querySelector('.portal-key.active-key');
         if (!activeKey) return;
@@ -481,6 +482,7 @@ document.addEventListener("DOMContentLoaded", () => {
         activeKey.classList.remove('has-data');
         customQInput.value = ''; customAInput.value = ''; btnDeleteQuestion.style.display = 'none';
 
+        // تحديث الذاكرة + السيرفر بعد الحذف ☁️
         localStorage.setItem('diwanCustomQuestions', JSON.stringify(customQuestionsData));
         if (typeof db !== 'undefined') {
             db.ref('rooms/' + roomId + '/questions').set(customQuestionsData);
@@ -490,6 +492,9 @@ document.addEventListener("DOMContentLoaded", () => {
         setTimeout(() => { btnDeleteQuestion.innerText = "حذف 🗑️"; btnDeleteQuestion.style.display = 'none'; }, 1500);
     });
 
+    // ==========================================
+    // 📡 نظام التنبيه الذكي للتلفزيون
+    // ==========================================
     const alertOverlay = document.createElement('div');
     alertOverlay.id = 'tv-buzzer-overlay';
     alertOverlay.innerHTML = `
